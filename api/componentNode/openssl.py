@@ -46,5 +46,5 @@ class OpensslOpers(AbstractOpers):
         return {"message": "config openssl.cnf successfully"}
 
     def copyssl(self, args):
-        cluster = args.get('containerClusterName')
+        pass
         

@@ -59,3 +59,12 @@ class AdminUser(APIHandler):
         result = {}
         result.setdefault("message", "creating admin user successful!")
         self.finish(result)
+
+
+class DownloadFile(APIHandler):
+    
+    def get(self,filename):
+        ifile  = open(filename, "r")
+        self.set_header ('Content-Type', 'text/cnf')
+        self.set_header ('Content-Disposition', 'attachment; filename='+filename+'')
+        self.write (ifile.read())

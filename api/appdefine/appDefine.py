@@ -8,7 +8,7 @@ dirname = os.path.dirname
 
 base_dir = os.path.abspath(dirname(dirname(__file__)))
 
-define('port', default = 8888, type = int, help = 'app listen port')
+define('port', default = 9999, type = int, help = 'app listen port')
 define('debug', default = False, type = bool, help = 'is debuging?')
 define('sitename', default = "logs manager", help = 'site name')
 define('domain', default = "letv.com", help = 'domain name')
