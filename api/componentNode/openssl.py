@@ -28,7 +28,7 @@ class OpensslOpers(AbstractOpers):
         content = get_file_data(options.openssl_conf)
         replaced = re.findall('.*IP:(.*)\n?', content)[0]
         content = content.replace(replaced, _ip)
-        set_file_data(content)
+        set_file_data(options.openssl_conf, content)
         
         logging.info('generate .key and .crt file')
         os.system(options.openssl_cmd)
@@ -36,9 +36,12 @@ class OpensslOpers(AbstractOpers):
         if not os.path.exists(options.tmp_keys_file):
             os.mkdir(options.tmp_keys_file)
         
-        logging.info('copy generate .key and .crt file to /tmp/keys')
-        os.system('cp %s %s' % (options.openssl_key_file, options.tmp_keys_file) )
-        os.system('cp %s %s' % (options.openssl_crt_file, options.tmp_keys_file) )
+        key_cmd = 'cp %s %s' % (options.openssl_key_file, options.tmp_keys_file)
+        crt_cmd = 'cp %s %s' % (options.openssl_crt_file, options.tmp_keys_file)
+        logging.info('do copy: %s' % key_cmd)
+        logging.info('do copy: %s' % crt_cmd)
+        os.system( key_cmd )
+        os.system( crt_cmd )
         
         return {"message": "config openssl.cnf successfully"}
 

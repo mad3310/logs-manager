@@ -6,7 +6,7 @@ Created on Mar 8, 2015
 from base import APIHandler
 from tornado_letv.tornado_basic_auth import require_basic_auth
 from tornado.web import asynchronous
-from componentNode.logstash_forwarder_oper import LogstashForwarderOpers
+from componentNode.logstash_forwarder_opers import LogstashForwarderOpers
 
 
 @require_basic_auth
@@ -62,6 +62,7 @@ class Logstash_forwarder_Config_Handler(APIHandler):
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/node/reload"
         '''
-        result = self.logstash_forwarder_opers.config()
+        args = self.get_all_arguments()
+        result = self.logstash_forwarder_opers.config(args)
         self.finish(result)
         

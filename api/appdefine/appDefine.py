@@ -26,7 +26,6 @@ define('smtp_tls', default = False, type = bool, help = 'smtp tls')
 define("logs_manager_property",default=join(base_dir, "config","logs_manager.property"), help="logs manager config file")
 define("data_node_property",default=join(base_dir,"config","dataNode.property"), help="data componentNode config file")
 define("cluster_property",default=join(base_dir,"config","cluster.property"), help="cluster config file")
-define("cluster_property",default=join(base_dir,"config","cluster.property"), help="cluster config file")
 define("base_dir", default=base_dir, help="project base dir")
 
 define("alarm_serious", default="tel:sms:email", help="alarm level is serious")

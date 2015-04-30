@@ -64,7 +64,9 @@ class Openssl_Config_Handler(APIHandler):
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/node/reload"
         '''
-        result = self.openssl_opers.config()
+        
+        args = self.get_all_arguments()
+        result = self.openssl_opers.config(args)
         self.finish(result)
 
 

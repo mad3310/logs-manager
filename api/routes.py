@@ -2,14 +2,13 @@
 #-*- coding: utf-8 -*-
 
 
-from handlers.admin import AdminConf, AdminUser, AdminReset
+from handlers.admin import AdminConf, AdminUser
 from handlers.logstash import *
 from handlers.logstash_forwarder import *
 
 handlers = [
             (r"/admin/conf", AdminConf),
             (r"/admin/user", AdminUser),
-            (r"/admin/reset", AdminReset),
             
             (r"/logstash/start", Logstash_Start_Handler),
             (r"/logstash/stop", Logstash_Stop_Handler),
