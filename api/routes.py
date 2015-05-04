@@ -5,11 +5,12 @@
 from handlers.admin import AdminConf, AdminUser, DownloadFile
 from handlers.logstash import *
 from handlers.logstash_forwarder import *
+from handlers.openssl import Openssl_Config_Handler, Openssl_Copy_Handler
 
 handlers = [
             (r"/admin/conf", AdminConf),
             (r"/admin/user", AdminUser),
-            (r"/inner/admin/file/{filename}", DownloadFile),
+            (r"/inner/admin/file/(.*)", DownloadFile),
             
             (r"/logstash/start", Logstash_Start_Handler),
             (r"/logstash/stop", Logstash_Stop_Handler),

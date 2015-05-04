@@ -1,8 +1,5 @@
 #-*- coding: utf-8 -*-
-import os
-import stat
 import base64
-import shutil
 import logging
 
 from utils.configFileOpers import ConfigFileOpers
@@ -10,7 +7,6 @@ from base import APIHandler
 from tornado.options import options
 from utils.exceptions import HTTPAPIError
 from tornado_letv.tornado_basic_auth import require_basic_auth
-from zk.zkOpers import ZkOpers
 
 
 class AdminConf(APIHandler):
@@ -30,7 +26,7 @@ class AdminConf(APIHandler):
         result.setdefault("message", "admin conf successful!")
         self.finish(result)
 
-        
+
 class AdminUser(APIHandler):
     
     confOpers = ConfigFileOpers()
@@ -61,10 +57,16 @@ class AdminUser(APIHandler):
         self.finish(result)
 
 
+@require_basic_auth
 class DownloadFile(APIHandler):
     
-    def get(self,filename):
+    def get(self, filename):
+        '''
+        function: create admin user
+        url example: curl -d "adminUser=root&adminPassword=root" "http://localhost:8888/admin/user"
+        '''
+        
         ifile  = open(filename, "r")
-        self.set_header ('Content-Type', 'text/cnf')
-        self.set_header ('Content-Disposition', 'attachment; filename='+filename+'')
-        self.write (ifile.read())
+        self.set_header('Content-Type', 'text/cnf')
+        self.set_header('Content-Disposition', 'attachment; filename='+filename+'')
+        self.write(ifile.read())

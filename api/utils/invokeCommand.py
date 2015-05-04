@@ -24,8 +24,3 @@ class InvokeCommand():
             return False
         else:
             return p    
-   
-if __name__ == "__main__":
-    invokeCommand = InvokeCommand()
-    sst_user_password = invokeCommand.runBootstrapScript()
-    print sst_user_password
