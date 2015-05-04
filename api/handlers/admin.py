@@ -6,8 +6,7 @@ from utils.configFileOpers import ConfigFileOpers
 from base import APIHandler
 from tornado.options import options
 from utils.exceptions import HTTPAPIError
-from tornado_letv.tornado_basic_auth import require_basic_auth
-
+from tornado.web import RequestHandler
 
 class AdminConf(APIHandler):
     
@@ -57,8 +56,7 @@ class AdminUser(APIHandler):
         self.finish(result)
 
 
-@require_basic_auth
-class DownloadFile(APIHandler):
+class DownloadFile(RequestHandler):
     
     def get(self, filename):
         '''

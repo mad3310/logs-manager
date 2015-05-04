@@ -61,7 +61,5 @@ class OpensslOpers(AbstractOpers):
         uri = '/inner/admin/file/%s' % filename
         curl = 'http://%s:%s%s' % (_ip, port, uri)
         fetch_ret = http_get(curl)
-        logging.info('fetch_ret:%s' % str(fetch_ret))
-        content = fetch_ret.get('response').get('message')
-        set_file_data(save_path, content)
+        set_file_data(save_path, fetch_ret)
         
