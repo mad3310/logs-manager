@@ -18,7 +18,7 @@ class Logstash_forwarder_Start_Handler(APIHandler):
     def post(self):
         '''
         function: start node
-        url example: curl --user root:root -d "" "http://localhost:8888/cluster/node/start"
+        url example: curl --user root:root -d "" "http://localhost:8888/logstash_forwarder/start"
         '''
         result = self.logstash_forwarder_opers.start()
         self.finish(result)
