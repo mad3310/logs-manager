@@ -46,3 +46,11 @@ define("logstash_forwarder_conf",default="/etc/logstash-forwarder.conf", help="l
 define("start_logstash_forwarder",default="service logstash-forwarder start", help="start  logstash-forwarder")
 define("stop_logstash_forwarder",default="service logstash-forwarder stop", help="stop  logstash-forwarder")
 define("restart_logstash_forwarder",default="service logstash-forwarder restart", help="stop  logstash-forwarder")
+
+define("start_elasticsearch",default="/etc/init.d/elasticsearch start", help="start  elasticsearch")
+define("stop_elasticsearch",default="/etc/init.d/elasticsearch stop", help="stop  elasticsearch")
+define("restart_elasticsearch",default="/etc/init.d/elasticsearch restart", help="stop  elasticsearch")
+
+define("start_kibana",default="/opt/kibana-4.0.2-linux-x64/bin/kibana > /var/log/kibana.log 2>&1 &", help="start kibana")
+define("stop_kibana",default="/opt/kibana-4.0.2-linux-x64/bin/kibana > /var/log/kibana.log 2>&1 &", help="stop kibana")
+define("restart_kibana",default="/opt/kibana-4.0.2-linux-x64/bin/kibana > /var/log/kibana.log 2>&1 &", help="restart kibana")

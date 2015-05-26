@@ -25,6 +25,21 @@ class Logstash_forwarder_Start_Handler(APIHandler):
 
 
 @require_basic_auth
+class Elasticsearch_Start_Handler(APIHandler):
+    
+    logstash_forwarder_opers = LogstashForwarderOpers()
+    
+    @asynchronous
+    def post(self):
+        '''
+        function: start node
+        url example: curl --user root:root -d "" "http://localhost:8888/logstash_forwarder/start"
+        '''
+        result = self.logstash_forwarder_opers.start()
+        self.finish(result)
+
+
+@require_basic_auth
 class Logstash_forwarder_Stop_Handler(APIHandler):
     
     logstash_forwarder_opers = LogstashForwarderOpers()

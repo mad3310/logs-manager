@@ -49,14 +49,14 @@ class OpensslOpers(AbstractOpers):
     def copyssl(self, args):
         _ip = args.get('ip')
         port = args.get('port')
-        
+        logging.info('ip :%s, port:%s' % (_ip, port))
         crt_filepath = os.path.join(options.tmp_keys_file, 'logstash-forwarder.crt')
         key_filepath = os.path.join(options.tmp_keys_file, 'logstash-forwarder.key')
         self._get(crt_filepath, options.openssl_crt_file, _ip, port)
         self._get(key_filepath, options.openssl_key_file, _ip, port)
         
         return {"message": "copy .crt and .key file successfully"}
-    
+
     def _get(self, filename, save_path, _ip, port):
         uri = '/inner/admin/file/%s' % filename
         curl = 'http://%s:%s%s' % (_ip, port, uri)

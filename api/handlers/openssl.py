@@ -28,7 +28,7 @@ class Openssl_Copy_Handler(APIHandler):
     def post(self):
         '''
         function: reload node
-        url example: curl --user root:root -d "" "http://localhost:8888/node/reload"
+        url example: curl --user root:root -d "" "http://localhost:8888//openssl/copy"
         '''
         args = self.get_all_arguments()
         result = self.openssl_opers.copyssl(args)
