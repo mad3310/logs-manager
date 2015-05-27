@@ -51,6 +51,6 @@ define("start_elasticsearch",default="/etc/init.d/elasticsearch start", help="st
 define("stop_elasticsearch",default="/etc/init.d/elasticsearch stop", help="stop  elasticsearch")
 define("restart_elasticsearch",default="/etc/init.d/elasticsearch restart", help="stop  elasticsearch")
 
-define("start_kibana",default="/opt/kibana-4.0.2-linux-x64/bin/kibana > /var/log/kibana.log 2>&1 &", help="start kibana")
-define("stop_kibana",default="/opt/kibana-4.0.2-linux-x64/bin/kibana > /var/log/kibana.log 2>&1 &", help="stop kibana")
-define("restart_kibana",default="/opt/kibana-4.0.2-linux-x64/bin/kibana > /var/log/kibana.log 2>&1 &", help="restart kibana")
+define("start_kibana",default="service kibana start", help="start kibana")
+define("stop_kibana",default="service kibana stop", help="stop kibana")
+define("restart_kibana",default="service kibana restart", help="restart kibana")
