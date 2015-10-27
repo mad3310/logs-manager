@@ -24,7 +24,7 @@ class LogstashForwarderOpers(AbstractOpers):
 
     def action(self, cmd):
         ret_val = os.system(cmd)
-        
+
         result = {}
         if ret_val != 0:
             message = "do %s failed" % cmd
@@ -34,8 +34,8 @@ class LogstashForwarderOpers(AbstractOpers):
             message = "do %s successfully" % cmd
             logging.error(message)
             result.setdefault("message", message)
-        
-        return result        
+
+        return result
 
     def start(self):
         return self.action(options.start_logstash_forwarder)
@@ -45,9 +45,9 @@ class LogstashForwarderOpers(AbstractOpers):
 
     def restart(self):
         return self.action(options.restart_logstash_forwarder)
-    
+
     def config(self, args):
-        
+
         logging.info('config args:%s' % str(args))
         _ip = args.get('ip')
         _path = args.get('paths')
@@ -60,5 +60,5 @@ class LogstashForwarderOpers(AbstractOpers):
         content = content.replace(path_replaced, _path)
         logging.info('content:%s' % content)
         set_file_data(options.logstash_forwarder_conf, content)
-        
+
         return {"message": "config /etc/logstash-forwarder.conf successfully"}

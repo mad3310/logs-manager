@@ -10,10 +10,25 @@ from componentNode.kibana_opers import KibanaOpers
 
 
 @require_basic_auth
-class Kibana_Start_Handler(APIHandler):
-    
+class Kibana_Config_Handler(APIHandler):
+
     kibana_opers = KibanaOpers()
-    
+
+    def post(self):
+        '''
+        function: start node
+        url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/start"
+        '''
+        args = self.pretty_param()
+        self.kibana_opers.config(args)
+        self.finish({"message": "config kibana success"})
+
+
+@require_basic_auth
+class Kibana_Start_Handler(APIHandler):
+
+    kibana_opers = KibanaOpers()
+
     def post(self):
         '''
         function: start node
@@ -25,9 +40,9 @@ class Kibana_Start_Handler(APIHandler):
 
 @require_basic_auth
 class Kibana_Stop_Handler(APIHandler):
-    
+
     kibana_opers = KibanaOpers()
-    
+
     def post(self):
         '''
         function: stop node
@@ -39,9 +54,9 @@ class Kibana_Stop_Handler(APIHandler):
 
 @require_basic_auth
 class Kibana_Restart_Handler(APIHandler):
-    
+
     kibana_opers = KibanaOpers()
-    
+
     def post(self):
         '''
         function: reload node

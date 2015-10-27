@@ -22,7 +22,7 @@ class LogstashOpers(AbstractOpers):
 
     def action(self, cmd):
         ret_val = os.system(cmd)
-        
+
         result = {}
         if ret_val != 0:
             message = "do %s failed" % cmd
@@ -32,8 +32,8 @@ class LogstashOpers(AbstractOpers):
             message = "do %s successfully" % cmd
             logging.error(message)
             result.setdefault("message", message)
-        
-        return result        
+
+        return result
 
     def start(self):
         return self.action(options.start_logstash)

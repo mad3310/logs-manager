@@ -11,9 +11,9 @@ from componentNode.logstash_opers import LogstashOpers
 
 @require_basic_auth
 class Logstash_Start_Handler(APIHandler):
-    
+
     logstash_opers = LogstashOpers()
-    
+
     def post(self):
         '''
         function: start node
@@ -25,9 +25,9 @@ class Logstash_Start_Handler(APIHandler):
 
 @require_basic_auth
 class Logstash_Stop_Handler(APIHandler):
-    
+
     logstash_opers = LogstashOpers()
-    
+
     def post(self):
         '''
         function: stop node
@@ -39,9 +39,9 @@ class Logstash_Stop_Handler(APIHandler):
 
 @require_basic_auth
 class Logstash_Restart_Handler(APIHandler):
-    
+
     logstash_opers = LogstashOpers()
-    
+
     def post(self):
         '''
         function: reload node
@@ -49,5 +49,3 @@ class Logstash_Restart_Handler(APIHandler):
         '''
         result = self.logstash_opers.restart()
         self.finish(result)
-
-

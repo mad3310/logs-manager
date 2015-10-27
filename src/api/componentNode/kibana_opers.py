@@ -4,10 +4,12 @@ Created on Mar 13, 2015
 @author: root
 '''
 import os
+import re
 import logging
 
 from tornado.options import options
 from common.abstractOpers import AbstractOpers
+from utils.configFileOpers import ConfigFileOpers
 
 
 class KibanaOpers(AbstractOpers):
@@ -19,10 +21,11 @@ class KibanaOpers(AbstractOpers):
         '''
         Constructor
         '''
+        self.config_op = ConfigFileOpers()
 
     def action(self, cmd):
         ret_val = os.system(cmd)
-        
+
         result = {}
         if ret_val != 0:
             message = "do %s failed" % cmd
@@ -32,8 +35,17 @@ class KibanaOpers(AbstractOpers):
             message = "do %s successfully" % cmd
             logging.error(message)
             result.setdefault("message", message)
-        
+
         return result
+
+    def config(self, args):
+        ip = args.get('ip')
+        url = self.config_op.get_value(
+            options.kibana_conf, 'elasticsearch_url', ':')
+        old_ip = re.findall('http://(.*):9200', url)[0]
+        url = url.replace(old_ip, ip)
+        self.config_op.set_value(options.kibana_conf, {
+                                 "elasticsearch_url": url}, ':')
 
     def start(self):
         return self.action(options.start_kibana)

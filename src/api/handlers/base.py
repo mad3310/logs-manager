@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-from tornado.web import RequestHandler,HTTPError
+from tornado.web import RequestHandler, HTTPError
 from tornado import escape
 from tornado.options import options
 
@@ -8,6 +8,7 @@ from utils.exceptions import HTTPAPIError, UserVisiableException
 from utils.mail import send_email
 from utils.invokeCommand import InvokeCommand
 from utils import get_host_ip
+from logic.zk_opers import RequestZkOpers
 import logging
 import traceback
 
@@ -21,12 +22,26 @@ class BaseHandler(RequestHandler):
             request_param.setdefault(key, args[key][0])
         return request_param
 
+
 class APIHandler(BaseHandler):
+
+    zk_op = None
+
+    def get_zkoper(self):
+        return self.zk_op if self.zk_op else RequestZkOpers()
+
+    def pretty_param(self):
+        args = self.request.arguments
+        res = {}
+        for k in args:
+            res[k] = args[k][0]
+        return res
+
     def finish(self, chunk=None, notification=None):
         if chunk is None:
             chunk = {}
 
-        if isinstance(chunk, dict) : 
+        if isinstance(chunk, dict):
             if 'error_code' not in chunk.keys():
                 chunk = {"meta": {"code": 200}, "response": chunk}
             else:
@@ -41,7 +56,7 @@ class APIHandler(BaseHandler):
 
             if isinstance(chunk, dict):
                 chunk = escape.json_encode(chunk)
-                
+
             self._write_buffer = [callback, "(", chunk, ")"] if chunk else []
             super(APIHandler, self).finish()
         else:
@@ -66,7 +81,8 @@ class APIHandler(BaseHandler):
             else:
                 e = HTTPAPIError(500)
 
-            exception = "".join([ln for ln in traceback.format_exception(*exc_info)])
+            exception = "".join(
+                [ln for ln in traceback.format_exception(*exc_info)])
 
             if status_code == 500 and not debug:
                 logging.error(e)
@@ -89,14 +105,14 @@ class APIHandler(BaseHandler):
             invokeCommand = InvokeCommand()
             cmd_str = "rpm -qa logs-manager"
             version_str = invokeCommand._runSysCmd(cmd_str)
-            logging.info("version_str :" + str(version_str)) 
+            logging.info("version_str :" + str(version_str))
             # send email
             subject = "[%s]Internal Server Error " % options.sitename
             body = self.render_string("errors/500_email.html",
                                       exception=exception)
-            
+
             body += "\n" + version_str[0] + "\nip:" + local_ip
-            
+
 #            email_from = "%s <noreply@%s>" % (options.sitename, options.domain)
             if options.send_email_switch:
                 send_email(options.admins, subject, body)
@@ -106,6 +122,7 @@ class APIHandler(BaseHandler):
 
 class ErrorHandler(RequestHandler):
     """Default 404: Not Found handler."""
+
     def prepare(self):
         super(ErrorHandler, self).prepare()
         raise HTTPError(404)
@@ -113,8 +130,7 @@ class ErrorHandler(RequestHandler):
 
 class APIErrorHandler(APIHandler):
     """Default API 404: Not Found handler."""
+
     def prepare(self):
         super(APIErrorHandler, self).prepare()
         raise HTTPAPIError(404)
-    
-    

@@ -11,9 +11,9 @@ from componentNode.logstash_forwarder_opers import LogstashForwarderOpers
 
 @require_basic_auth
 class Logstash_forwarder_Start_Handler(APIHandler):
-    
+
     logstash_forwarder_opers = LogstashForwarderOpers()
-    
+
     @asynchronous
     def post(self):
         '''
@@ -26,9 +26,9 @@ class Logstash_forwarder_Start_Handler(APIHandler):
 
 @require_basic_auth
 class Elasticsearch_Start_Handler(APIHandler):
-    
+
     logstash_forwarder_opers = LogstashForwarderOpers()
-    
+
     @asynchronous
     def post(self):
         '''
@@ -41,9 +41,9 @@ class Elasticsearch_Start_Handler(APIHandler):
 
 @require_basic_auth
 class Logstash_forwarder_Stop_Handler(APIHandler):
-    
+
     logstash_forwarder_opers = LogstashForwarderOpers()
-    
+
     def post(self):
         '''
         function: stop node
@@ -55,9 +55,9 @@ class Logstash_forwarder_Stop_Handler(APIHandler):
 
 @require_basic_auth
 class Logstash_forwarder_Restart_Handler(APIHandler):
-    
+
     logstash_forwarder_opers = LogstashForwarderOpers()
-    
+
     def post(self):
         '''
         function: reload node
@@ -69,9 +69,9 @@ class Logstash_forwarder_Restart_Handler(APIHandler):
 
 @require_basic_auth
 class Logstash_forwarder_Config_Handler(APIHandler):
-    
+
     logstash_forwarder_opers = LogstashForwarderOpers()
-    
+
     def post(self):
         '''
         function: reload node
@@ -80,4 +80,3 @@ class Logstash_forwarder_Config_Handler(APIHandler):
         args = self.get_all_arguments()
         result = self.logstash_forwarder_opers.config(args)
         self.finish(result)
-        

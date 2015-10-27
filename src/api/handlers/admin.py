@@ -8,10 +8,11 @@ from tornado.options import options
 from utils.exceptions import HTTPAPIError
 from tornado.web import RequestHandler
 
+
 class AdminConf(APIHandler):
-    
+
     confOpers = ConfigFileOpers()
-    
+
     def post(self):
         '''
         function: admin conf
@@ -19,52 +20,48 @@ class AdminConf(APIHandler):
         '''
         requestParam = self.get_all_arguments()
         if requestParam != {}:
-            self.confOpers.setValue(options.logs_manager_property, requestParam)
-            
+            self.confOpers.set_value(options.zk_property, requestParam, '=')
+
         result = {}
         result.setdefault("message", "admin conf successful!")
         self.finish(result)
 
 
 class AdminUser(APIHandler):
-    
+
     confOpers = ConfigFileOpers()
-    
+
     def post(self):
         '''
         function: create admin user
         url example: curl -d "adminUser=root&adminPassword=root" "http://localhost:8888/admin/user"
         '''
-        requestParam = {}
-        args = self.request.arguments
-        logging.info("args :"+ str(args))
-        for key in args:
-            value = args[key][0]
-            if key == 'adminPassword':
-                value = base64.encodestring(value).strip('\n')
-            requestParam.setdefault(key,value)
-        if requestParam['adminUser'] == '' or requestParam['adminPassword'] == '':
-            raise HTTPAPIError(status_code=401, error_detail="username or password is empty",\
-                               notification = "direct", \
-                               log_message= "username or password is empty", \
-                               response = "username or password is empty")
+        requestParam = self.get_all_arguments()
+        if 'adminPassword' in requestParam:
+            new_value = base64.encodestring(
+                requestParam['adminPassword']).strip('\n')
+            requestParam['adminPassword'] = new_value
+        logging.info("args :" + str(requestParam))
+
         if requestParam != {}:
-            self.confOpers.setValue(options.cluster_property, requestParam)
-        
+            self.confOpers.set_value(
+                options.cluster_property, requestParam, '=')
+
         result = {}
         result.setdefault("message", "creating admin user successful!")
         self.finish(result)
 
 
 class DownloadFile(RequestHandler):
-    
+
     def get(self, filename):
         '''
         function: create admin user
         url example: curl -d "adminUser=root&adminPassword=root" "http://localhost:8888/admin/user"
         '''
-        
-        ifile  = open(filename, "r")
+
+        ifile = open(filename, "r")
         self.set_header('Content-Type', 'text/cnf')
-        self.set_header('Content-Disposition', 'attachment; filename='+filename+'')
+        self.set_header('Content-Disposition',
+                        'attachment; filename=' + filename + '')
         self.write(ifile.read())
