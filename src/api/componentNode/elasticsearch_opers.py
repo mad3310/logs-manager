@@ -31,6 +31,7 @@ class ElasticsearchOpers(AbstractOpers):
         param['clusterUUID'] = cluster_uuid
 
         self.config_op.set_value(options.cluster_property, param)
+        self.zk_op.init_path()
         self.zk_op.write_cluster_info(
             self.config_op.getValue(options.cluster_property))
 
@@ -70,7 +71,7 @@ class ElasticsearchOpers(AbstractOpers):
         total_dic['cluster.name'] = cluster_info['clusterName']
         total_dic['node.name'] = node_info['dataNodeName']
         total_dic['index.number_of_shards'] = 2
-        total_dic['path.data'] = '/var/log/esdata'
+        total_dic['path.data'] = '/srv/esdata'
         total_dic['path.work'] = '/var/log/eswork'
         total_dic['bootstrap.mlockall'] = 'true'
         total_dic['network.host'] = node_info['dataNodeIp']
