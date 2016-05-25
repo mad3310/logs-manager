@@ -55,8 +55,8 @@ class ZkOpers(object):
             if data:
                 self_ip = self.config_op.get_value(
                     options.data_node_property, 'dataNodeIp')
-                if self_ip in data['discovery.zen.ping.unicast.hosts']:
-                    data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
+                #if self_ip in data['discovery.zen.ping.unicast.hosts']:
+                    #data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
                 self.config_op.set_value(options.es_config, data, ':')
 
     def cluster_exists(self, name):
