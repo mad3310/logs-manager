@@ -1,0 +1,75 @@
+#!/bin/bash
+# Copyright 2015, yaokuo
+#
+# /etc/init.d/kibana
+#
+# Startup script for kibana
+#
+# chkconfig: 2345 20 80
+# description: Starts and stops etcd
+
+. /etc/init.d/functions
+
+DIR="/opt/kibana-4.0.2-linux-x64/bin/.."
+NODE=${DIR}/node/bin/node
+SERVER=${DIR}/src/bin/kibana.js
+
+prog="kibana"
+prog_bin=$NODE
+prog_log="/var/log/kibana.log"
+desc="kibana serivce"
+
+if ! [ -f $prog_bin ]; then
+  echo "$prog binary not found."
+  exit 5
+fi
+
+start() {
+  if [ $(pgrep -f $prog_bin) ]; then
+    success && echo "$desc is already running($prog): " 
+    return 0
+  fi 
+
+  CONFIG_PATH="${DIR}/config/kibana.yml" NODE_ENV="production" exec "${NODE}" ${SERVER} ${@} >> $prog_log 2>&1 &
+  if [ $? ]; then
+    success && echo "Starting $desc ($prog): " 
+  else
+    failure && echo "Starting $desc ($prog): "
+  fi
+  RETVAL=$?
+  return $RETVAL
+}
+
+stop() {
+  pkill -f $prog_bin && success || failure
+  echo "Shutting down $desc ($prog): "
+}
+
+restart() {
+    stop
+    start
+}
+
+status() {
+  if [ -z $pid ]; then
+     pid=$(pgrep -f $prog_bin)
+  fi
+
+  if [ -z $pid ]; then
+    echo "$prog is NOT running."
+    return 1
+  else
+    echo "$prog is running (pid is $pid)."
+  fi
+
+}
+
+case "$1" in
+  start)   start;;
+  stop)    stop;;
+  restart) restart;;
+  status)  status;;
+  *)       echo "Usage: $0 {start|stop|restart|status}"
+           RETVAL=2;;
+esac
+exit $RETVAL
