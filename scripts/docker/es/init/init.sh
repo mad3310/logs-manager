@@ -31,6 +31,19 @@ EOF
 ifconfig $IFACE $IP/16
 echo 'set network successfully'
 
+#route
+gateway=`echo $IP | cut -d. -f1,2`.0.1
+route add default gw $gateway
+route del -net 0.0.0.0 netmask 0.0.0.0 dev eth0
+
+#hosts
+umount /etc/hosts
+cat > /etc/hosts <<EOF
+127.0.0.1 localhost
+$IP     `hostname`
+EOF
+echo 'set host successfully'
+
 #unzip file to es
 if [ ! -d "/usr/share/elasticsearch/plugins/bigdesk" ]; then
 cd /tmp
