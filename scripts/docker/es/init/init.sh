@@ -30,3 +30,35 @@ GATEWAY=$GATEWAY
 EOF
 ifconfig $IFACE $IP/16
 echo 'set network successfully'
+
+#unzip file to es
+if [ ! -d "/usr/share/elasticsearch/plugins/bigdesk" ]; then
+cd /tmp
+/usr/bin/unzip bigdesk-master.zip
+/usr/bin/unzip elasticsearch-head-master.zip
+/usr/bin/unzip elasticsearch-kopf-master.zip
+mv bigdesk-master /usr/share/elasticsearch/plugins/bigdesk
+mv elasticsearch-head-master /usr/share/elasticsearch/plugins/head
+mv elasticsearch-kopf-master /usr/share/elasticsearch/plugins/kopf
+chmod 755 /usr/share/elasticsearch/plugins/bigdesk
+chmod 755 /usr/share/elasticsearch/plugins/head
+chmod 755 /usr/share/elasticsearch/plugins/kopf
+echo 'unzip file to es'
+fi
+
+#set elasticsearch
+cat > /etc/sysconfig/elasticsearch << EOF
+ES_HOME=/usr/share/elasticsearch
+MAX_OPEN_FILES=65535
+MAX_MAP_COUNT=262144
+LOG_DIR=/var/log/elasticsearch
+DATA_DIR=/var/lib/elasticsearch
+WORK_DIR=/tmp/elasticsearch
+CONF_DIR=/etc/elasticsearch
+CONF_FILE=/etc/elasticsearch/elasticsearch.yml
+ES_HEAP_SIZE=8g
+ES_HEAP_NEWSIZE=1g
+ES_JAVA_OPTS="\$JAVA_OPTS -XX:+UseCondCardMark -XX:CMSWaitDuration=250 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly"
+ES_USER=root
+EOF
+echo 'set es'

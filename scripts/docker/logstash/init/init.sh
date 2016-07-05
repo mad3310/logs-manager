@@ -28,3 +28,11 @@ GATEWAY=$GATEWAY
 EOF
 ifconfig $IFACE $IP/16
 echo 'set network successfully'
+
+#set logstash
+cat > /etc/sysconfig/logstash << EOF
+LS_HEAP_SIZE="1500m"
+LS_JAVA_OPTS="\$JAVA_OPTS -XX:+UseCondCardMark -XX:CMSWaitDuration=250 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly"
+LS_WORKER_THREADS=5
+EOF
+echo 'set logstash'
