@@ -11,7 +11,7 @@ RUN alias ll='ls -l'
 RUN mkdir -p /usr/local/init/
 
 #kibana
-ADD init/kibana-4.0.2-linux-x64.tar.gz /opt
+ADD init/kibana-4.0.2-linux-x64.tar.gz /tmp/kibana-4.0.2-linux-x64.tar.gz
 ADD init/kibana /etc/init.d/kibana
 RUN chmod u+x  /etc/init.d/kibana
 

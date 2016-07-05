@@ -38,3 +38,11 @@ cat > /etc/hosts <<EOF
 $IP     `hostname`
 EOF
 echo 'set host successfully'
+
+#uncompress kibana file
+if [ ! -d "/opt/kibana-4.0.2" ]; then
+cd /tmp
+tar -xvzf kibana-4.0.2-linux-x64.tar.gz
+mv kibana-4.0.2-linux-x64 /opt/kibana
+echo 'uncompress kibana file'
+fi
