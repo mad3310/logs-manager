@@ -7,7 +7,6 @@ Created on Mar 8, 2015
 import uuid
 
 from tornado.options import options
-
 from base import APIHandler
 from tornado_letv.tornado_basic_auth import require_basic_auth
 from componentNode.elasticsearch_opers import ElasticsearchOpers
@@ -75,6 +74,7 @@ class Elasticsearch_Start_Handler(ElasticSearchBaseHandler):
         function: start node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/start"
         '''
+        self.elastic_op.pull_config()
         result = self.elastic_op.start()
         self.finish(result)
 

@@ -49,15 +49,15 @@ class ZkOpers(object):
         path = self.config_path + CONFIG_ES
         self.zk_helper.ensure_path(path)
 
-        @self.zk_helper.zk.DataWatch(path)
-        def watch_es_config(data, stat):
-            data = self.read_es_config()
-            if data:
-                self_ip = self.config_op.get_value(
-                    options.data_node_property, 'dataNodeIp')
-                #if self_ip in data['discovery.zen.ping.unicast.hosts']:
-                    #data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
-                self.config_op.set_value(options.es_config, data, ':')
+        #@self.zk_helper.zk.DataWatch(path)
+        #def watch_es_config(data, stat):
+        #    data = self.read_es_config()
+        #    if data:
+        #        self_ip = self.config_op.get_value(
+        #            options.data_node_property, 'dataNodeIp')
+        #        #if self_ip in data['discovery.zen.ping.unicast.hosts']:
+        #            #data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
+        #        self.config_op.set_value(options.es_config, data, ':') 
 
     def cluster_exists(self, name):
         cluster_path = self.root_path + '/' + name

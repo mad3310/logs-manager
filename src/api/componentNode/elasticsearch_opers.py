@@ -83,6 +83,15 @@ class ElasticsearchOpers(AbstractOpers):
 
         self.config_op.set_value(options.es_config, total_dic, separator=':')
 
+    def pull_config(self):
+        data = self.zk_op.read_es_config()
+        if data:
+            self_ip = self.config_op.get_value(
+                options.data_node_property, 'dataNodeIp')
+            if self_ip in data['discovery.zen.ping.unicast.hosts']:
+                data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
+            self.config_op.set_value(options.es_config, data, ':')
+
     def _add_ip(self, ip):
         lock = self.zk_op.get_config_lock()
         with lock:
