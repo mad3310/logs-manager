@@ -78,8 +78,6 @@ class ElasticsearchOpers(AbstractOpers):
         total_dic['discovery.zen.minimum_master_nodes'] = 3
         total_dic['discovery.zen.ping.timeout'] = '5s'
         total_dic['discovery.zen.ping.multicast.enabled'] = 'false'
-        # this should be set from zookeeper listener
-        # total_dic['discovery.zen.ping.unicast.hosts']=''#get from zookeeper
 
         self.config_op.set_value(options.es_config, total_dic, separator=':')
 
