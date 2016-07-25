@@ -78,10 +78,23 @@ class ElasticsearchOpers(AbstractOpers):
         total_dic['discovery.zen.minimum_master_nodes'] = 3
         total_dic['discovery.zen.ping.timeout'] = '5s'
         total_dic['discovery.zen.ping.multicast.enabled'] = 'false'
-        # this should be set from zookeeper listener
-        # total_dic['discovery.zen.ping.unicast.hosts']=''#get from zookeeper
 
         self.config_op.set_value(options.es_config, total_dic, separator=':')
+
+    def sys_config(self, **kargs):
+        dic = {}
+        for k, v in kargs.items():
+            dic[k.upper()] = v
+        self.config_op.set_value(options.sys_es_config, dic)
+
+    def pull_config(self):
+        data = self.zk_op.read_es_config()
+        if data:
+            self_ip = self.config_op.get_value(
+                options.data_node_property, 'dataNodeIp')
+            if self_ip in data['discovery.zen.ping.unicast.hosts']:
+                data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
+            self.config_op.set_value(options.es_config, data, ':')
 
     def _add_ip(self, ip):
         lock = self.zk_op.get_config_lock()

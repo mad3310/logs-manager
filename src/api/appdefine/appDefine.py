@@ -33,6 +33,8 @@ define("cluster_property", default=join(base_dir, "config",
                                         "cluster.property"), help="cluster config file")
 define("es_config", default="/etc/elasticsearch/elasticsearch.yml",
        help="es cnf file name")
+define("sys_es_config", default="/etc/sysconfig/elasticsearch",
+       help="sysconfig es cnf file name")
 define("base_dir", default=base_dir, help="project base dir")
 
 define("alarm_serious", default="tel:sms:email", help="alarm level is serious")
