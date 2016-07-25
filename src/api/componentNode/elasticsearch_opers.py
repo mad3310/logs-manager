@@ -83,6 +83,12 @@ class ElasticsearchOpers(AbstractOpers):
 
         self.config_op.set_value(options.es_config, total_dic, separator=':')
 
+    def sys_config(self, **kargs):
+        dic = {}
+        for k, v in kargs.items():
+            dic[k.upper()] = v
+        self.config_op.set_value(options.sys_es_config, dic)
+
     def pull_config(self):
         data = self.zk_op.read_es_config()
         if data:
