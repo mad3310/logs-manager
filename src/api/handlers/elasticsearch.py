@@ -63,7 +63,7 @@ class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
 
     def post(self):
         param = self.pretty_param()
-        es_heap_size = param.get('es_heap_size', 1073741824)
+        es_heap_size = int(param.get('es_heap_size', 1073741824))
         if es_heap_size < 1073741824:
             self.set_status(500)
             self.finish({"message": "para not valid!"})
