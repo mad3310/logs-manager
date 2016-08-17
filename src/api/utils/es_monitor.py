@@ -5,10 +5,12 @@ import time
 from logic.zk_opers import ZkOpers
 
 
-zkoper = ZkOpers()
-MONITOR_IP = zkoper.get_self_ip()
+
 
 class ESMonitor():
+    zkoper = ZkOpers()
+    MONITOR_IP = zkoper.get_self_ip()
+
     @staticmethod
     def _portuse(ip=MONITOR_IP, port=9200):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -33,8 +35,8 @@ class ESMonitor():
         return int(psutil.disk_usage('/').percent)
 
     @staticmethod
-    def save():
+    def save(ip=MONITOR_IP,zkoper=zkoper):
         ctime = time.strftime('%Y-%m-%d %H:%M:%S')
-        data = {"availability": ESMonitor._portuse(ip=MONITOR_IP), "cpu_rate": ESMonitor._getcpuInfo(),
+        data = {"availability": ESMonitor._portuse(ip=ip), "cpu_rate": ESMonitor._getcpuInfo(),
                 "mem_rate": ESMonitor._get_mem_rate(), "sdisk_rate": ESMonitor._get_sdisk_rate(),"ctime":ctime}
         zkoper.write_monitor(data=data)
