@@ -121,14 +121,18 @@ class Elasticsearch_Restart_Handler(ElasticSearchBaseHandler):
 class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
 
     def post(self):
+        '''
+        function:add node
+        url example: curl --user root:root -X POST -d "ips=["10.154.255.248"]" "http://localhost:9999/elasticsearch/nodes"
+        '''
         requestParam = self.get_all_arguments()
-        ips = requestParam["ips"]
+        ips = eval(requestParam["ips"])
         result = self.elastic_op.add_ip(ips)
         self.finish(result)
 
     def delete(self):
         requestParam = self.get_all_arguments()
-        ips = requestParam["ips"]
+        ips = eval(requestParam["ips"])
         result = self.elastic_op.remove_ip(ips)
         self.finish(result)
 
