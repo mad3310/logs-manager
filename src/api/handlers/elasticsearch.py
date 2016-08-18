@@ -133,6 +133,10 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         self.finish(result)
 
     def delete(self):
+        '''
+        function:remove node
+        url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/nodes?ips=['10.154.255.243']"
+        '''
         requestParam = self.get_all_arguments()
         ips = eval(requestParam["ips"])
         result = self.elastic_op.remove_ip(ips)
