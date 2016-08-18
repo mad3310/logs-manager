@@ -127,6 +127,8 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         '''
         requestParam = self.get_all_arguments()
         ips = eval(requestParam["ips"])
+        print ips, type(ips)
+        print "*"*80
         result = self.elastic_op.add_ip(ips)
         self.finish(result)
 

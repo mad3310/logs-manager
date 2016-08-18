@@ -1,3 +1,4 @@
+import logging
 import socket
 import psutil
 import time
@@ -5,16 +6,13 @@ import time
 from logic.zk_opers import ZkOpers
 
 
-
-
 class ESMonitor():
-    zkoper = ZkOpers()
-    MONITOR_IP = zkoper.get_self_ip()
-
     @staticmethod
-    def _portuse(ip=MONITOR_IP, port=9200):
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    def _portuse(port=9200):
         try:
+            zkoper = ZkOpers()
+            ip = zkoper.get_self_ip()
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((ip, int(port)))
             s.shutdown(2)
             return True
@@ -35,8 +33,12 @@ class ESMonitor():
         return int(psutil.disk_usage('/').percent)
 
     @staticmethod
-    def save(ip=MONITOR_IP,zkoper=zkoper):
-        ctime = time.strftime('%Y-%m-%d %H:%M:%S')
-        data = {"availability": ESMonitor._portuse(ip=ip), "cpu_rate": ESMonitor._getcpuInfo(),
-                "mem_rate": ESMonitor._get_mem_rate(), "sdisk_rate": ESMonitor._get_sdisk_rate(),"ctime":ctime}
-        zkoper.write_monitor(data=data)
+    def save():
+        try:
+            zkoper = ZkOpers()
+            ctime = time.strftime('%Y-%m-%d %H:%M:%S')
+            data = {"availability": ESMonitor._portuse(), "cpu_rate": ESMonitor._getcpuInfo(),
+                    "mem_rate": ESMonitor._get_mem_rate(), "sdisk_rate": ESMonitor._get_sdisk_rate(),"ctime":ctime}
+            zkoper.write_monitor(data=data)
+        except Exception as e:
+            logging.info("zk not inited  (%s)" % (e))
