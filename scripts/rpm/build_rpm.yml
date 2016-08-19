@@ -14,7 +14,7 @@ target_type: rpm
 name: logs-manager
 
 # 软件包版本号
-version: 0.0.2a2
+version: 0.0.2a3
 
 # 软件包安装及运行时依赖
 dependencies:
