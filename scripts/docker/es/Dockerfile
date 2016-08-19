@@ -14,6 +14,7 @@ RUN alias ll='ls -l'
 RUN mkdir -p /usr/local/init/
 
 #elasticsearch
+
 ADD init/elasticsearch-1.5.1.noarch.rpm /tmp/elasticsearch-1.5.1.noarch.rpm
 RUN rpm -ivh /tmp/elasticsearch-1.5.1.noarch.rpm
 
