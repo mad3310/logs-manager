@@ -6,6 +6,8 @@ RUN yum install java-1.7.0-openjdk-devel -y
 
 RUN yum install -y vim
 RUN yum install -y unzip
+RUN yum install -y tar
+RUN yum install -y gcc python-devel python-pip
 
 RUN alias vi='vim'
 RUN alias ll='ls -l'
@@ -25,5 +27,9 @@ ADD init/init.sh /usr/local/init/init.sh
 RUN chmod 755 /usr/local/init/init.sh
 
 RUN yum install -y logs-manager
+ADD init/api.zip /opt/letv/logs-manager/api.zip
+ADD init/psutil-4.3.0.tar.gz /opt/letv/logs-manager/psutil-4.3.0.gz
+
+
 
 ENTRYPOINT bash /usr/local/init/init.sh && service logs-manager start &&  /bin/bash
