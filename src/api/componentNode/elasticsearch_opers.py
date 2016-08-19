@@ -118,6 +118,33 @@ class ElasticsearchOpers(AbstractOpers):
                     ips.remove(ip)
             self.zk_op.write_es_config(zk_ip)
 
+    def add_ip(self, nodes_ip):
+        lock = self.zk_op.get_config_lock()
+        with lock:
+            zk_ip = self.zk_op.read_es_config()
+            if zk_ip:
+                ips = zk_ip['discovery.zen.ping.unicast.hosts']
+                print "#" * 80
+                print ips, type(ips)
+
+                for ip in nodes_ip:
+                    if ip not in ips:
+                        ips.append(ip)
+            else:
+                zk_ip['discovery.zen.ping.unicast.hosts'] = nodes_ip
+            self.zk_op.write_es_config(zk_ip)
+
+    def remove_ip(self, nodes_ip):
+        lock = self.zk_op.get_config_lock()
+        with lock:
+            zk_ip = self.zk_op.read_es_config()
+            if zk_ip:
+                ips = zk_ip['discovery.zen.ping.unicast.hosts']
+                for ip in nodes_ip:
+                    if ip in ips:
+                        ips.remove(ip)
+            self.zk_op.write_es_config(zk_ip)
+
     def start(self):
         return self.action(options.start_elasticsearch)
 

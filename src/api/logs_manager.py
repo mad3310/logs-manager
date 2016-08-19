@@ -11,6 +11,7 @@ import tornado.web
 from tornado.options import options
 from tornado.httpserver import HTTPServer
 from appdefine import appDefine
+from utils.es_monitor import ESMonitor
 
 
 class Application(tornado.web.Application):
@@ -27,9 +28,10 @@ def main():
     tornado.options.parse_command_line()
     http_server = HTTPServer(Application())
     http_server.listen(options.port)
-
+    tornado.ioloop.PeriodicCallback(ESMonitor.save, 3000).start()
     tornado.ioloop.IOLoop.instance().start()
 
 
 if __name__ == "__main__":
     main()
+
