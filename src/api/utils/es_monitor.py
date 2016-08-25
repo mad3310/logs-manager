@@ -1,6 +1,5 @@
 import logging
 import socket
-import psutil
 import time
 
 from logic.zk_opers import ZkOpers
@@ -20,25 +19,11 @@ class ESMonitor():
             return False
 
     @staticmethod
-    def _getcpuInfo():
-        return int(100-psutil.cpu_times_percent().idle)
-
-    @staticmethod
-    def _get_mem_rate():
-        mem_rate = psutil.virtual_memory().percent
-        return int(mem_rate)
-
-    @staticmethod
-    def _get_sdisk_rate():
-        return int(psutil.disk_usage('/').percent)
-
-    @staticmethod
     def save():
         try:
             zkoper = ZkOpers()
             ctime = time.strftime('%Y-%m-%d %H:%M:%S')
-            data = {"availability": ESMonitor._portuse(), "cpu_rate": ESMonitor._getcpuInfo(),
-                    "mem_rate": ESMonitor._get_mem_rate(), "sdisk_rate": ESMonitor._get_sdisk_rate(),"ctime":ctime}
+            data = {"availability": ESMonitor._portuse(), "ctime":ctime}
             zkoper.write_monitor(data=data)
         except Exception as e:
             logging.info("zk not inited  (%s)" % (e))

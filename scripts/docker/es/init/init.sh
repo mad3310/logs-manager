@@ -75,5 +75,3 @@ ES_JAVA_OPTS="\$JAVA_OPTS -XX:+UseCondCardMark -XX:CMSWaitDuration=250 -XX:+UseP
 ES_USER=root
 EOF
 echo 'set es'
-
-cd /opt/letv/logs-manager && cd psutil-4.3.0.gz/psutil-4.3.0/ && python setup.py install
