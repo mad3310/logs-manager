@@ -3,11 +3,24 @@ import socket
 import time
 
 from logic.zk_opers import ZkOpers
+from tornado.options import options
+
+from src.api.utils.mail import MailEgine
+
+from src.api.componentNode.elasticsearch_opers import ElasticsearchOpers
 
 
 class ESMonitor():
+
     @staticmethod
-    def _portuse(port=9200):
+    def portuse(port=9200):
+        es_opers = ElasticsearchOpers()
+        node_info = es_opers.config_op.getValue(options.data_node_property, ['dataNodeIp', 'dataNodeName'])
+        cluster_info = es_opers.config_op.getValue(options.cluster_property, ['clusterUUID', 'clusterName'])
+        total_dic['cluster.name'] = cluster_info['clusterName']
+        total_dic['node.name'] = node_info['dataNodeName']
+        subject = ""
+        body = ""
         try:
             zkoper = ZkOpers()
             ip = zkoper.get_self_ip()
@@ -16,14 +29,9 @@ class ESMonitor():
             s.shutdown(2)
             return True
         except:
+            MailEgine.send_normal_email(options.smtp_from_address, options.admins, subject, body)
             return False
 
-    @staticmethod
-    def save():
-        try:
-            zkoper = ZkOpers()
-            ctime = time.strftime('%Y-%m-%d %H:%M:%S')
-            data = {"availability": ESMonitor._portuse(), "ctime":ctime}
-            zkoper.write_monitor(data=data)
-        except Exception as e:
-            logging.info("zk not inited  (%s)" % (e))
+
+# node_info = self.config_op.getValue(options.data_node_property, ['dataNodeIp', 'dataNodeName'])
+# cluster_info = self.config_op.getValue(options.cluster_property, ['clusterUUID', 'clusterName'])
