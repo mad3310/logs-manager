@@ -21,7 +21,8 @@ class ESMonitor():
         total_dic['node.name'] = node_info['dataNodeName']
         if not total_dic['cluster.name'] or total_dic['node.name']:
             return
-        subject = "%s, %s, PORT(9200) ERROR" % (total_dic['cluster.name'], total_dic['node.name'])
+        # title = "{cluster}-{node}-PORT(9200)ERROR".format(cluster=total_dic['cluster.name'], node=total_dic['node.name'])
+        subject = "service down"
         body = "%s, %s, PORT(9200) ERROR" % (total_dic['cluster.name'], total_dic['node.name'])
         print subject
         try:
@@ -30,4 +31,4 @@ class ESMonitor():
             s.connect((ip, int(port)))
             s.shutdown(2)
         except:
-            MailEgine.send_exception_email(options.smtp_from_address,options.admins, subject, body)
+            MailEgine.send_exception_email(options.smtp_from_address, options.admins, subject, body)
