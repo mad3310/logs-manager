@@ -1,6 +1,7 @@
 # coding=utf-8
 import hashlib
 from utils.mail_session import SMTPSession
+from componentNode.elasticsearch_opers import ElasticsearchOpers
 
 from datetime import datetime, timedelta
 from email import encoders
@@ -198,8 +199,14 @@ class MailEgine(object):
             mail_dict = self.mails[md5_value]
             mailfrom = mail_dict['mailfrom']
             to = mail_dict['to']
-            subject = 'OK--%s' % mail_dict['subject']
-            body = 'DONOT WORRY'
+            total_dic = {}
+            es_opers = ElasticsearchOpers()
+            node_info = es_opers.config_op.getValue(options.data_node_property, ['dataNodeIp', 'dataNodeName'])
+            cluster_info = es_opers.config_op.getValue(options.cluster_property, ['clusterUUID', 'clusterName'])
+            total_dic['cluster.name'] = cluster_info['clusterName']
+            total_dic['node.name'] = node_info['dataNodeName']
+            subject = "%s, %s, PORT(9200) OK" % (total_dic['cluster.name'], total_dic['node.name'])
+            body = "DONOT WORRY %s, %s, PORT(9200) OK %s" % (total_dic['cluster.name'], total_dic['node.name'],mail_dict['subject'])
             fr, mailto = self._mail_address_filter(mailfrom, to)
             yield dict(md5_value=md5_value,
                        mailfrom=fr,
