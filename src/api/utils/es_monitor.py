@@ -19,12 +19,15 @@ class ESMonitor():
         cluster_info = es_opers.config_op.getValue(options.cluster_property, ['clusterUUID', 'clusterName'])
         total_dic['cluster.name'] = cluster_info['clusterName']
         total_dic['node.name'] = node_info['dataNodeName']
+        if not total_dic['cluster.name'] or total_dic['node.name']:
+            return
         subject = "%s, %s, PORT(9200) ERROR" % (total_dic['cluster.name'], total_dic['node.name'])
         body = "%s, %s, PORT(9200) ERROR" % (total_dic['cluster.name'], total_dic['node.name'])
+        print subject
         try:
             ip = "127.0.0.1"
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((ip, int(port)))
             s.shutdown(2)
         except:
-            MailEgine.send_exception_email(options.smtp_from_address,options.admins.split(","), subject, body)
+            MailEgine.send_exception_email(options.smtp_from_address,options.admins, subject, body)
