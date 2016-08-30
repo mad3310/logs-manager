@@ -26,12 +26,7 @@ class ESMonitor():
             ip = "127.0.0.1"
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((ip, int(port)))
-            print "Y" * 30
             s.shutdown(2)
-            print 1
         except:
-            print "Z" * 30
-
-            print options.smtp_from_address, ['wangyiyang <wangyiyang@le.com>'], subject, body
-            MailEgine.send_exception_email(options.smtp_from_address, ['wangyiyang <wangyiyang@le.com>'], subject, body)
-            print "W" * 30
+            # MailEgine.send_exception_email(options.smtp_from_address,options.admins, subject, body)
+            MailEgine.send_exception_email(options.smtp_from_address,options.admins.split(","), subject, body)

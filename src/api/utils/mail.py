@@ -42,11 +42,9 @@ class EmailAddress(object):
 
 class MailEgine(object):
     def __init__(self):
-        print "MailEgine init start"
         # including the md5 sum of mail content
         self.mails = {}
         self.session = SMTPSession
-        print "MailEgine init end"
 
     def egine_fire_start(self, host, port, user='',
                          password='', duration=30,
