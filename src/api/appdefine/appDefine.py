@@ -16,7 +16,7 @@ define('domain', default="letv.com", help='domain name')
 define('send_email_switch', default=True, type=bool,
        help='the flag of if send error email')
 define('admins', default=("zhoubingzheng <zhoubingzheng@letv.com>",
-                          "zhangzeng <zhangzeng@letv.com>",), help='admin email address')
+                          "wangyiyang <wangyiyang@le.com>","liujinliu <liujinliu@le.com>"), help='admin email address')
 define('smtp_host', default="mail.letv.com", help='smtp host')
 define('smtp_port', default=587, help='smtp port')
 define('smtp_user', default="mcluster", help='smtp user')
@@ -33,6 +33,8 @@ define("cluster_property", default=join(base_dir, "config",
                                         "cluster.property"), help="cluster config file")
 define("es_config", default="/etc/elasticsearch/elasticsearch.yml",
        help="es cnf file name")
+define("sys_es_config", default="/etc/sysconfig/elasticsearch",
+       help="sysconfig es cnf file name")
 define("base_dir", default=base_dir, help="project base dir")
 
 define("alarm_serious", default="tel:sms:email", help="alarm level is serious")

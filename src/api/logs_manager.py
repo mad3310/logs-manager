@@ -11,6 +11,8 @@ import tornado.web
 from tornado.options import options
 from tornado.httpserver import HTTPServer
 from appdefine import appDefine
+from utils.es_monitor import ESMonitor
+from utils.mail import MailEgine
 
 
 class Application(tornado.web.Application):
@@ -27,9 +29,11 @@ def main():
     tornado.options.parse_command_line()
     http_server = HTTPServer(Application())
     http_server.listen(options.port)
-
+    MailEgine.egine_fire_start(options.smtp_host, options.smtp_port, options.smtp_user, options.smtp_password)
+    tornado.ioloop.PeriodicCallback(ESMonitor.portuse, 3000).start()
+    tornado.ioloop.PeriodicCallback(MailEgine.mail_scan_work, 30000).start()
     tornado.ioloop.IOLoop.instance().start()
-
 
 if __name__ == "__main__":
     main()
+
