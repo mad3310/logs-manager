@@ -21,9 +21,8 @@ class ESMonitor():
         total_dic['node.name'] = node_info['dataNodeName']
         if not total_dic['cluster.name'] or not total_dic['node.name']:
             return
-        # title = "{cluster}-{node}-PORT(9200)ERROR".format(cluster=total_dic['cluster.name'], node=total_dic['node.name'])
-        subject = "service down"
-        body = "%s, %s, PORT(9200) ERROR" % (total_dic['cluster.name'], total_dic['node.name'])
+        subject = "%s %s %s" % (total_dic['cluster.name'], total_dic['node.name'], "PORT(9200) ERROR")
+        body = "%s %s %s" % (total_dic['cluster.name'], total_dic['node.name'], "PORT(9200) ERROR")
         try:
             ip = "127.0.0.1"
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
