@@ -19,12 +19,13 @@ class ESMonitor():
         cluster_info = es_opers.config_op.getValue(options.cluster_property, ['clusterUUID', 'clusterName'])
         total_dic['cluster.name'] = cluster_info['clusterName']
         total_dic['node.name'] = node_info['dataNodeName']
-        if not total_dic['cluster.name'] or not total_dic['node.name']:
+        total_dic['node.ip'] = node_info['dataNodeIp']
+        if not total_dic['cluster.name'] or not total_dic['node.name'] or not total_dic['node.ip']:
             return
         subject = "%s %s %s" % (total_dic['cluster.name'], total_dic['node.name'], "PORT(9200) ERROR")
         body = "%s %s %s" % (total_dic['cluster.name'], total_dic['node.name'], "PORT(9200) ERROR")
         try:
-            ip = "127.0.0.1"
+            ip = total_dic['node.ip']
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect((ip, int(port)))
             s.shutdown(2)
