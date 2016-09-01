@@ -102,8 +102,7 @@ class MailEgine(object):
         message["From"] = mailfrom
         message["To"] = COMMASPACE.join(to)
         if md5_value:
-            message["Subject"] = '%s_%s' % (md5_value[0:5],
-                                            utf8(subject))
+            message["Subject"] = '[logs-manager]%s_%s' % (utf8(subject), md5_value[0:5])
         else:
             message["Subject"] = utf8(subject)
         return message
@@ -178,9 +177,7 @@ class MailEgine(object):
 
     def send_normal_email(self, mailfrom, to, subject, body,
                           html=None, attachments=[]):
-        print "#"*20
         fr, mailto = self._mail_address_filter(mailfrom, to)
-        print fr, mailto
         message = self.mail_report(mailfrom, to, subject, body,
                                    md5_value=None,
                                    attachments=attachments,
@@ -205,8 +202,8 @@ class MailEgine(object):
             cluster_info = es_opers.config_op.getValue(options.cluster_property, ['clusterUUID', 'clusterName'])
             total_dic['cluster.name'] = cluster_info['clusterName']
             total_dic['node.name'] = node_info['dataNodeName']
-            subject = "%s, %s, PORT(9200) OK" % (total_dic['cluster.name'], total_dic['node.name'])
-            body = "DONOT WORRY %s, %s, PORT(9200) OK %s" % (total_dic['cluster.name'], total_dic['node.name'],mail_dict['subject'])
+            subject = "%s %s, %s, %s" % ("DONOT WORRY", total_dic['cluster.name'], total_dic['node.name'],"PORT(9200) OK")
+            body = "DONOT WORRY %s, %s, PORT(9200) OK" % (total_dic['cluster.name'], total_dic['node.name'])
             fr, mailto = self._mail_address_filter(mailfrom, to)
             yield dict(md5_value=md5_value,
                        mailfrom=fr,
