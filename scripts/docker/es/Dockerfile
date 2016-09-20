@@ -14,12 +14,15 @@ RUN alias ll='ls -l'
 RUN mkdir -p /usr/local/init/
 
 #elasticsearch
-ADD init/elasticsearch-1.5.1.noarch.rpm /tmp/elasticsearch-1.5.1.noarch.rpm
-RUN rpm -ivh /tmp/elasticsearch-1.5.1.noarch.rpm
+ADD init/elasticsearch-2.3.2.rpm /tmp/elasticsearch-2.3.2.rpm
+RUN rpm -ivh /tmp/elasticsearch-2.3.2.rpm
 
+#add es plugin
 ADD init/bigdesk-master.zip /tmp/bigdesk-master.zip
 ADD init/elasticsearch-head-master.zip /tmp/elasticsearch-head-master.zip
 ADD init/elasticsearch-kopf-master.zip /tmp/elasticsearch-kopf-master.zip
+ADD init/elasticsearch-sql.zip /tmp/elasticsearch-sql.zip
+
 
 ADD init/init.sh /usr/local/init/init.sh
 RUN chmod 755 /usr/local/init/init.sh

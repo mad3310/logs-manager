@@ -50,12 +50,18 @@ cd /tmp
 /usr/bin/unzip bigdesk-master.zip
 /usr/bin/unzip elasticsearch-head-master.zip
 /usr/bin/unzip elasticsearch-kopf-master.zip
+/usr/bin/unzip elasticsearch-sql.zip
+
 mv bigdesk-master /usr/share/elasticsearch/plugins/bigdesk
 mv elasticsearch-head-master /usr/share/elasticsearch/plugins/head
 mv elasticsearch-kopf-master /usr/share/elasticsearch/plugins/kopf
+mv elasticsearch-sql-2.3.2.0 /usr/share/elasticsearch/plugins/sql
+
 chmod 755 /usr/share/elasticsearch/plugins/bigdesk
 chmod 755 /usr/share/elasticsearch/plugins/head
 chmod 755 /usr/share/elasticsearch/plugins/kopf
+chmod 755 /usr/share/elasticsearch/plugins/sql
+
 echo 'unzip file to es'
 fi
 
@@ -75,3 +81,13 @@ ES_JAVA_OPTS="\$JAVA_OPTS -XX:+UseCondCardMark -XX:CMSWaitDuration=250 -XX:+UseP
 ES_USER=root
 EOF
 echo 'set es'
+
+#set elasticsearch.yml
+cat >> /etc/elasticsearch/elasticsearch.yml << EOF
+script.inline: on
+script.indexed: on
+EOF
+echo 'set elasticsearch.yml'
+
+
+
