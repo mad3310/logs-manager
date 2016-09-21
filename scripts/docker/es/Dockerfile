@@ -18,7 +18,6 @@ ADD init/elasticsearch-2.3.2.rpm /tmp/elasticsearch-2.3.2.rpm
 RUN rpm -ivh /tmp/elasticsearch-2.3.2.rpm
 
 #add es plugin
-ADD init/bigdesk-master.zip /tmp/bigdesk-master.zip
 ADD init/elasticsearch-head-master.zip /tmp/elasticsearch-head-master.zip
 ADD init/elasticsearch-kopf-master.zip /tmp/elasticsearch-kopf-master.zip
 ADD init/elasticsearch-sql.zip /tmp/elasticsearch-sql.zip
