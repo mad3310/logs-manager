@@ -80,7 +80,7 @@ echo 'set es'
 
 #set elasticsearch.yml
 is_wr1=`grep inline /etc/elasticsearch/elasticsearch.yml|wc -l`
-if [ $is_wr1 -eq 0 ]
+if [ $is_wr1 -eq 0 ]; then
 cat >> /etc/elasticsearch/elasticsearch.yml << EOF
 script.inline: on
 script.indexed: on
@@ -90,8 +90,7 @@ fi
 
 #open root run es
 is_wr2=`grep insecure /usr/share/elasticsearch/bin/elasticsearch.in.sh|wc -l`
-if [ $is_wr2 -eq 0 ]
-then
+if [ $is_wr2 -eq 0 ]; then
 cat >> /usr/share/elasticsearch/bin/elasticsearch.in.sh << EOF
 JAVA_OPTS="\$JAVA_OPTS -Des.insecure.allow.root=true"
 EOF
