@@ -60,12 +60,11 @@ class ElasticsearchNodeSyncHandler(ElasticSearchBaseHandler):
 
 @require_basic_auth
 class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
+
     '''
     function: start node
     url example: curl --user root:root -d "" "http://localhost:9999/elasticsearch/config"
     '''
-
-
 
     def post(self):
         param = self.pretty_param()
@@ -76,7 +75,7 @@ class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
             return
         self.elastic_op.config()
         self.elastic_op.sys_config(
-                 es_heap_size='%dg' %(es_heap_size/1073741824))
+            es_heap_size='%dg' % (es_heap_size / 1073741824))
         self.finish({"message": "config cluster successful!"})
 
 
@@ -127,7 +126,7 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
                      -d "ips=["10.154.255.248"]" "http://localhost:9999/elasticsearch/nodes"
         '''
         requestParam = self.get_all_arguments()
-        ips = eval(requestParam["ips"])
+        ips = eval(requestParam.get("ips", []))
         result = self.elastic_op.add_ip(ips)
         self.finish(result)
 
@@ -137,7 +136,6 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/nodes?ips=['10.154.255.243']"
         '''
         requestParam = self.get_all_arguments()
-        ips = eval(requestParam["ips"])
+        ips = eval(requestParam.get("ips", []))
         result = self.elastic_op.remove_ip(ips)
         self.finish(result)
-
