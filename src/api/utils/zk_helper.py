@@ -1,6 +1,3 @@
-__author__ = 'mazheng'
-
-
 import logging
 import threading
 

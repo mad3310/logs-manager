@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#-*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-
 
 from handlers.admin import AdminConf, AdminUser, DownloadFile
 from handlers.logstash import *

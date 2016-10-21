@@ -1,8 +1,3 @@
-'''
-Created on Mar 13, 2015
-
-@author: root
-'''
 import os
 import re
 import logging
@@ -14,14 +9,6 @@ from utils import http_get
 
 
 class OpensslOpers(AbstractOpers):
-    '''
-    classdocs
-    '''
-
-    def __init__(self):
-        '''
-        Constructor
-        '''
 
     def new_config(self, args):
         ip = args.get('ip')

@@ -1,5 +1,3 @@
-__author__ = 'mazheng'
-
 import inspect
 
 MAGIC_STRING = "test"

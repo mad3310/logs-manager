@@ -1,8 +1,8 @@
-#!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import os.path
 import routes
+
 import logging.config
 import tornado.ioloop
 import tornado.options

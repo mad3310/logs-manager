@@ -1,9 +1,3 @@
-'''
-Created on Mar 8, 2015
-
-@author: root
-'''
-
 import uuid
 
 from tornado.options import options
@@ -60,12 +54,10 @@ class ElasticsearchNodeSyncHandler(ElasticSearchBaseHandler):
 
 @require_basic_auth
 class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
-    '''
+    """
     function: start node
     url example: curl --user root:root -d "" "http://localhost:9999/elasticsearch/config"
-    '''
-
-
+    """
 
     def post(self):
         param = self.pretty_param()
@@ -84,10 +76,10 @@ class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
 class Elasticsearch_Start_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function: start node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/start"
-        '''
+        """
         self.elastic_op.pull_config()
         result = self.elastic_op.start()
         self.finish(result)
@@ -97,10 +89,10 @@ class Elasticsearch_Start_Handler(ElasticSearchBaseHandler):
 class Elasticsearch_Stop_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function: stop node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/stop"
-        '''
+        """
         result = self.elastic_op.stop()
         self.finish(result)
 
@@ -109,10 +101,10 @@ class Elasticsearch_Stop_Handler(ElasticSearchBaseHandler):
 class Elasticsearch_Restart_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/restart"
-        '''
+        """
         result = self.elastic_op.restart()
         self.finish(result)
 
@@ -121,21 +113,21 @@ class Elasticsearch_Restart_Handler(ElasticSearchBaseHandler):
 class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function:add node
         url example: curl --user root:root -X POST
                      -d "ips=["10.154.255.248"]" "http://localhost:9999/elasticsearch/nodes"
-        '''
+        """
         requestParam = self.get_all_arguments()
         ips = eval(requestParam["ips"])
         result = self.elastic_op.add_ip(ips)
         self.finish(result)
 
     def delete(self):
-        '''
+        """
         function:remove node
         url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/nodes?ips=['10.154.255.243']"
-        '''
+        """
         requestParam = self.get_all_arguments()
         ips = eval(requestParam["ips"])
         result = self.elastic_op.remove_ip(ips)

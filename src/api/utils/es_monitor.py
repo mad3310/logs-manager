@@ -5,7 +5,6 @@ import time
 from tornado.options import options
 
 from utils.mail import MailEgine
-
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 
 
