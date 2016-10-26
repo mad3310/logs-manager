@@ -1,11 +1,7 @@
-__author__ = 'xsank'
-
 from tornado.options import options
 
 from utils.zk_helper import ZkHelper
-from utils import get_zk_address
-from utils import getClusterUUID
-from utils import get_cluster_name
+from utils import get_zk_address, getClusterUUID, get_cluster_name
 from utils.configFileOpers import ConfigFileOpers
 from utils.singleton import singleton
 
@@ -146,4 +142,3 @@ class ToolZkOpers(ZkOpers):
     '''
     specially for tool class
     '''
-

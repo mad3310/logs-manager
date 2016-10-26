@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from base import APIHandler
 from tornado_letv.tornado_basic_auth import require_basic_auth
 from componentNode.kibana_opers import KibanaOpers

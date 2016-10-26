@@ -1,6 +1,11 @@
 # coding=utf-8
 
+import logging
+import re
+import smtplib
+import time
 import hashlib
+
 from utils.mail_session import SMTPSession
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 
@@ -11,10 +16,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import COMMASPACE
 from email.utils import formatdate
-import logging
-import re
-import smtplib
-import time
 
 from tornado.escape import utf8
 from tornado.options import options
@@ -116,7 +117,7 @@ class MailEgine(object):
 
     def _mail_record(self, md5_value, mailfrom,
                      to, subject):
-        if not self.mails.has_key(md5_value):
+        if not md5_value in self.mails:
             self.mails[md5_value] = dict(
                 mailfrom=mailfrom,
                 to=to,
@@ -126,14 +127,14 @@ class MailEgine(object):
             dict(sendtime=now.strftime(TIME_FORMAT)))
 
     def _mail_record_renew(self, md5_value):
-        if self.mails.has_key(md5_value):
+        if md5_value in self.mails:
             now = datetime.now()
             self.mails[md5_value].update(
                 dict(sendtime=now.strftime(TIME_FORMAT)))
 
     def _should_send(self, md5_value):
         now = datetime.now()
-        if self.mails.has_key(md5_value):
+        if md5_value in self.mails:
             last_time = self.mails[md5_value]['sendtime']
             time_pass = now - datetime.strptime(
                 last_time, TIME_FORMAT)
@@ -302,8 +303,6 @@ _session = None
 MailEgine = MailEgine()
 
 if __name__ == '__main__':
-    import time
-
     smtp_host = "mail.letv.com"
     smtp_port = 587
     smtp_user = 'mcluster'
@@ -317,12 +316,8 @@ if __name__ == '__main__':
                                smtp_user, smtp_passwd, interval=60)
     MailEgine.send_exception_email(mailfrom, to, subject, body)
     time.sleep(30)
-    print '=========='
     MailEgine.send_exception_email(mailfrom, to, subject, body)
-    print MailEgine.mails
-    print '====normal mail===='
     MailEgine.send_normal_email(mailfrom, to, subject, body)
-    print MailEgine.mails
     time.sleep(120)
     MailEgine.send_exception_email(mailfrom, to, subject, body)
     while True:

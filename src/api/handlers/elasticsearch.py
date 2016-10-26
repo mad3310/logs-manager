@@ -1,7 +1,8 @@
-import uuid
+# -*- coding: utf-8 -*-
+from base import APIHandler
 
 from tornado.options import options
-from base import APIHandler
+
 from tornado_letv.tornado_basic_auth import require_basic_auth
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 from utils.exceptions import HTTPAPIError
@@ -14,10 +15,13 @@ class ElasticSearchBaseHandler(APIHandler):
     def check_cluster(self, name):
         zk_op = self.get_zkoper()
         if zk_op.cluster_exists(name) or not name:
-            raise HTTPAPIError(status_code=417, error_detail="server has belong to a cluster,should be not create new cluster!",
+            raise HTTPAPIError(status_code=417, error_detail="server has belong to a cluster,\
+                                    should be not create new cluster!",
                                notification="direct",
-                               log_message="server has belong to a cluster,should be not create new cluster!",
-                               response="the server has belonged to a cluster,should be not create new cluster!")
+                               log_message="server has belong to a cluster,should be not \
+                                    create new cluster!",
+                               response="the server has belonged to a cluster,should be \
+                                    not create new cluster!")
 
 
 @require_basic_auth
@@ -61,14 +65,14 @@ class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
 
     def post(self):
         param = self.pretty_param()
-        es_heap_size = int(param.get('es_heap_size', 1073741824))
-        if es_heap_size < 1073741824:
+        es_heap_size = int(param.get('es_heap_size', options.es_heap_size))
+        if es_heap_size < options.es_heap_size:
             self.set_status(500)
             self.finish({"message": "para not valid!"})
             return
         self.elastic_op.config()
         self.elastic_op.sys_config(
-                 es_heap_size='%dg' %(es_heap_size/1073741824))
+            es_heap_size='%dg' % (es_heap_size / options.es_heap_size))
         self.finish({"message": "config cluster successful!"})
 
 
@@ -132,4 +136,3 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         ips = eval(requestParam["ips"])
         result = self.elastic_op.remove_ip(ips)
         self.finish(result)
-

@@ -30,7 +30,7 @@ def main():
     http_server = HTTPServer(Application())
     http_server.listen(options.port)
     MailEgine.egine_fire_start(options.smtp_host, options.smtp_port, options.smtp_user, options.smtp_password)
-    tornado.ioloop.PeriodicCallback(ESMonitor.portuse, 3000).start()
+    tornado.ioloop.PeriodicCallback(ESMonitor.main, 3000).start()
     tornado.ioloop.PeriodicCallback(MailEgine.mail_scan_work, 30000).start()
     tornado.ioloop.IOLoop.instance().start()
 
