@@ -43,6 +43,7 @@ handlers = [
     (r"/elasticsearch/stop", Elasticsearch_Stop_Handler),
     (r"/elasticsearch/restart", Elasticsearch_Restart_Handler),
     (r"/elasticsearch/nodes", Elasticsearch_Nodes_Handler),
+    (r"/elasticsearch/health", Elasticsearch_Health_Handler),
 
     # for monitor
     (r"/elasticsearch/monitor", ElasticSearchClusterMonitorSync),

@@ -2,13 +2,14 @@
 
 import logging
 
-from elasticsearch import Elasticsearch, TransportError
+from elasticsearch import TransportError
 from tornado.options import options
 
 from utils.mail import MailEgine
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 from common.appconfig import ES_MONTIOR_TRTRY
-from libs.es.store import local_es
+from libs.es.store import LOCAL_ES
+
 
 class ESMonitor:
     def __init__(self):
@@ -26,13 +27,14 @@ class ESMonitor:
         return total_dic
 
     def get_stats(self):
-        return local_es.get_stats()
+        return LOCAL_ES.get_stats()
 
 
     def send_mail(self, message):
         subject = "%s %s %s" % (self.node_info['cluster.name'], self.node_info['node.name'], message)
         body = "%s %s %s" % (self.node_info['cluster.name'], self.node_info['node.name'], message)
         MailEgine.send_exception_email(options.smtp_from_address, options.admins, subject, body)
+
 
 
 es_monitor = ESMonitor()

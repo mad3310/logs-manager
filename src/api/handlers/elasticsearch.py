@@ -6,6 +6,8 @@ from componentNode.elasticsearch_opers import ElasticsearchOpers
 from utils.exceptions import HTTPAPIError
 from common.appconfig import ES_HEAP_SIZE
 
+from libs.es.store import LOCAL_ES
+
 
 class ElasticSearchBaseHandler(APIHandler):
 
@@ -134,4 +136,11 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         requestParam = self.get_all_arguments()
         ips = eval(requestParam.get("ips", []))
         result = self.elastic_op.remove_ip(ips)
+        self.finish(result)
+
+
+class Elasticsearch_Health_Handler(ElasticSearchBaseHandler):
+
+    def get(self):
+        result = LOCAL_ES.get_health()
         self.finish(result)

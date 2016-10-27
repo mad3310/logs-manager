@@ -4,14 +4,16 @@ import os.path
 import routes
 
 import logging.config
+
 import tornado.ioloop
 import tornado.options
 import tornado.web
 
 from tornado.options import options
 from tornado.httpserver import HTTPServer
+
 from appdefine import appDefine
-from utils.es_monitor import ESMonitor
+from utils.es_monitor import main as es_monitor_mian
 from utils.mail import MailEgine
 
 
@@ -30,7 +32,7 @@ def main():
     http_server = HTTPServer(Application())
     http_server.listen(options.port)
     MailEgine.egine_fire_start(options.smtp_host, options.smtp_port, options.smtp_user, options.smtp_password)
-    tornado.ioloop.PeriodicCallback(ESMonitor.main, 3000).start()
+    tornado.ioloop.PeriodicCallback(es_monitor_mian, 3000).start()
     tornado.ioloop.PeriodicCallback(MailEgine.mail_scan_work, 30000).start()
     tornado.ioloop.IOLoop.instance().start()
 

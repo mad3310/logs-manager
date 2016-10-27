@@ -15,8 +15,7 @@ def _get_es():
         _get_es._es = es
     return _get_es._es
 
-monitor_es = _get_es()
-
+MONITOR_ES = _get_es()
 
 def _get_local_es():
     es_opers = ElasticsearchOpers()
@@ -31,4 +30,4 @@ def _get_local_es():
         _get_local_es._es = es
     return _get_local_es._es
 
-local_es = _get_local_es()
+LOCAL_ES = _get_local_es()

@@ -49,5 +49,10 @@ class ElasticsearchEngine(object):
             self.connect()
         return self.engine.cluster.stats()
 
+    def get_health(self):
+        if not self.engine:
+            self.connect()
+        return self.engine.cluster.health()
+
 
 
