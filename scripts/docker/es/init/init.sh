@@ -45,17 +45,20 @@ EOF
 echo 'set host successfully'
 
 #unzip file to es
-if [ ! -d "/usr/share/elasticsearch/plugins/bigdesk" ]; then
+if [ ! -d "/usr/share/elasticsearch/plugins/head" ]; then
 cd /tmp
-/usr/bin/unzip bigdesk-master.zip
 /usr/bin/unzip elasticsearch-head-master.zip
 /usr/bin/unzip elasticsearch-kopf-master.zip
-mv bigdesk-master /usr/share/elasticsearch/plugins/bigdesk
+/usr/bin/unzip elasticsearch-sql.zip
+
 mv elasticsearch-head-master /usr/share/elasticsearch/plugins/head
 mv elasticsearch-kopf-master /usr/share/elasticsearch/plugins/kopf
-chmod 755 /usr/share/elasticsearch/plugins/bigdesk
+mv elasticsearch-sql-2.3.2.0 /usr/share/elasticsearch/plugins/sql
+
 chmod 755 /usr/share/elasticsearch/plugins/head
 chmod 755 /usr/share/elasticsearch/plugins/kopf
+chmod 755 /usr/share/elasticsearch/plugins/sql
+
 echo 'unzip file to es'
 fi
 
@@ -68,10 +71,29 @@ LOG_DIR=/var/log/elasticsearch
 DATA_DIR=/var/lib/elasticsearch
 WORK_DIR=/tmp/elasticsearch
 CONF_DIR=/etc/elasticsearch
-CONF_FILE=/etc/elasticsearch/elasticsearch.yml
 ES_HEAP_SIZE=8g
 ES_HEAP_NEWSIZE=1g
 ES_JAVA_OPTS="\$JAVA_OPTS -XX:+UseCondCardMark -XX:CMSWaitDuration=250 -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:CMSInitiatingOccupancyFraction=75 -XX:+UseCMSInitiatingOccupancyOnly"
 ES_USER=root
 EOF
 echo 'set es'
+
+#set elasticsearch.yml
+is_wr1=`grep inline /etc/elasticsearch/elasticsearch.yml|wc -l`
+if [ $is_wr1 -eq 0 ]; then
+cat >> /etc/elasticsearch/elasticsearch.yml << EOF
+script.inline: on
+script.indexed: on
+EOF
+echo 'set elasticsearch.yml'
+fi
+
+#open root run es
+is_wr2=`grep insecure /usr/share/elasticsearch/bin/elasticsearch.in.sh|wc -l`
+if [ $is_wr2 -eq 0 ]; then
+cat >> /usr/share/elasticsearch/bin/elasticsearch.in.sh << EOF
+JAVA_OPTS="\$JAVA_OPTS -Des.insecure.allow.root=true"
+EOF
+fi
+
+

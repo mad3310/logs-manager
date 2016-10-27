@@ -77,6 +77,3 @@ define("stop_kibana", default="service kibana stop", help="stop kibana")
 define("restart_kibana", default="service kibana restart", help="restart kibana")
 define("kibana_conf", default="/opt/kibana-4.0.2-linux-x64/config/kibana.yml",
        help="kibana config file path")
-
-define("es_port", default=9200, type=int, help='es port')
-define("es_heap_size", default=1073741824, type=int, help='es_heap_size')

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from base import APIHandler
 
-from tornado.options import options
-
 from tornado_letv.tornado_basic_auth import require_basic_auth
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 from utils.exceptions import HTTPAPIError
+from common.appconfig import ES_HEAP_SIZE
 
 
 class ElasticSearchBaseHandler(APIHandler):
@@ -65,14 +64,14 @@ class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
 
     def post(self):
         param = self.pretty_param()
-        es_heap_size = int(param.get('es_heap_size', options.es_heap_size))
-        if es_heap_size < options.es_heap_size:
+        es_heap_size = int(param.get('es_heap_size', ES_HEAP_SIZE))
+        if es_heap_size < ES_HEAP_SIZE:
             self.set_status(500)
             self.finish({"message": "para not valid!"})
             return
         self.elastic_op.config()
         self.elastic_op.sys_config(
-            es_heap_size='%dg' % (es_heap_size / options.es_heap_size))
+            es_heap_size='%dg' % (es_heap_size / ES_HEAP_SIZE))
         self.finish({"message": "config cluster successful!"})
 
 
@@ -123,7 +122,7 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
                      -d "ips=["10.154.255.248"]" "http://localhost:9999/elasticsearch/nodes"
         """
         requestParam = self.get_all_arguments()
-        ips = eval(requestParam["ips"])
+        ips = eval(requestParam.get("ips", []))
         result = self.elastic_op.add_ip(ips)
         self.finish(result)
 
@@ -133,6 +132,6 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/nodes?ips=['10.154.255.243']"
         """
         requestParam = self.get_all_arguments()
-        ips = eval(requestParam["ips"])
+        ips = eval(requestParam.get("ips", []))
         result = self.elastic_op.remove_ip(ips)
         self.finish(result)

@@ -3,7 +3,6 @@ import socket
 
 from tornado.options import options
 
-from libs.es.store import es
 from utils.mail import MailEgine
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 
