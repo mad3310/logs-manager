@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
-import socket
 
+import logging
+
+from elasticsearch import Elasticsearch, TransportError
 from tornado.options import options
 
 from utils.mail import MailEgine
 from componentNode.elasticsearch_opers import ElasticsearchOpers
+from common.appconfig import ES_MONTIOR_TRTRY
+from libs.es.store import local_es
 
+class ESMonitor:
+    def __init__(self):
+        self.retry = 0
+        self.node_info = self.get_node_info()
 
-
-class ESMonitor():
-
-
-    @staticmethod
-    def portuse(port=options.es_port):
+    def get_node_info(self):
         total_dic = {}
         es_opers = ElasticsearchOpers()
         node_info = es_opers.config_op.getValue(options.data_node_property, ['dataNodeIp', 'dataNodeName'])
@@ -20,26 +23,37 @@ class ESMonitor():
         total_dic['cluster.name'] = cluster_info.get('clusterName')
         total_dic['node.name'] = node_info.get('dataNodeName')
         total_dic['node.ip'] = node_info.get('dataNodeIp')
-        if not total_dic['cluster.name'] or not total_dic['node.name'] or not total_dic['node.ip']:
-            return
-        subject = "%s %s %s" % (total_dic['cluster.name'], total_dic['node.name'], "PORT(9200) ERROR")
-        body = "%s %s %s" % (total_dic['cluster.name'], total_dic['node.name'], "PORT(9200) ERROR")
+        return total_dic
+
+    def get_stats(self):
+        return local_es.get_stats()
+
+
+    def send_mail(self, message):
+        subject = "%s %s %s" % (self.node_info['cluster.name'], self.node_info['node.name'], message)
+        body = "%s %s %s" % (self.node_info['cluster.name'], self.node_info['node.name'], message)
+        MailEgine.send_exception_email(options.smtp_from_address, options.admins, subject, body)
+
+
+es_monitor = ESMonitor()
+
+def main():
+    stats = None
+    while True:
         try:
-            ip = total_dic.get('node.ip')
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((ip, int(port)))
-            s.shutdown(2)
-        except:
-            MailEgine.send_exception_email(options.smtp_from_address, options.admins, subject, body)
+            stats = es_monitor.get_stats()
+        except TransportError as e:
+            logging.info(e)
+            stats = None
 
-    @staticmethod
-    def state():
-        pass
-
-
-    @staticmethod
-    def main():
-        pass
+        if stats is None:
+            es_monitor.retry += 1
+        else:
+            es_monitor.retry = 0
+            break
+        if es_monitor.retry == ES_MONTIOR_TRTRY:
+            es_monitor.send_mail("are not available")
+            break
 
 
 
