@@ -10,11 +10,15 @@ RUN alias vi='vim'
 RUN alias ll='ls -l'
 
 RUN mkdir -p /usr/local/init/
+RUN yum install -y logrotate
+RUN yum install -y wget
 
 #logstash
-ADD init/logstash-1.4.2-1_2c0f5a1.noarch.rpm /tmp/logstash-1.4.2-1_2c0f5a1.noarch.rpm
+RUN cd /tmp
+RUN /usr/bin/wget --no-check-certificate https://10.154.29.92:443/v1/AUTH_gaoqiang3/oss/logstash-2.4.0.noarch.rpm
+RUN rpm -ivh logstash-2.4.0.noarch.rpm
 ADD init/logstash.conf /etc/logstash/conf.d/logstash.conf
-RUN rpm -ivh /tmp/logstash-1.4.2-1_2c0f5a1.noarch.rpm
+
 
 ADD init/init.sh /usr/local/init/init.sh
 RUN chmod 755  /usr/local/init/init.sh
