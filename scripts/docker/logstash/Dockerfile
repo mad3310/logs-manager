@@ -23,6 +23,12 @@ ADD init/logstash.conf /etc/logstash/conf.d/logstash.conf
 ADD init/init.sh /usr/local/init/init.sh
 RUN chmod 755  /usr/local/init/init.sh
 
+# install monit
+RUN yum install -y wget
+RUN yum install -y monit
+ADD ./init/monit /etc/init.d/monit
+RUN chmod 755 /etc/init.d/monit
+
 RUN yum install -y logs-manager
 
 ENTRYPOINT bash /usr/local/init/init.sh && service logs-manager start &&  /bin/bash

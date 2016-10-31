@@ -42,6 +42,42 @@ $IP     `hostname`
 EOF
 echo 'set host successfully'
 
+#set logrotate
+cat > /etc/logrotate.d/monit << EOF
+/var/log/monit.log
+{
+daily
+dateext
+dateformat -%Y%m%d-%s
+nocompress
+size 1M
+missingok
+notifempty
+copytruncate
+rotate 5
+postrotate
+endscript
+}
+EOF
+echo 'set logrotate successfully'
+
+# set monit
+cat >  /etc/monitrc  << EOF
+set daemon 30
+set logfile /var/log/monit.log
+set pidfile /var/run/monit.pid
+set httpd port 30000
+allow 127.0.0.1
+
+check process salt_minion MATCHING 'logstash'
+    start program = "/etc/init.d/logstash start"
+    stop  program = "/etc/init.d/logstash stop"    
+EOF
+
+/etc/init.d/monit start
+
+echo 'set monit successfully'
+
 #set logstash
 cat > /etc/sysconfig/logstash << EOF
 LS_HEAP_SIZE="1500m"
