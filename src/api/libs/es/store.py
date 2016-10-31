@@ -3,14 +3,14 @@
 from tornado.options import options
 
 from componentNode.elasticsearch_opers import ElasticsearchOpers
-from common.appconfig import ES_PORT
+from common.appconfig import ES_PORT, ES_MONITOR_HOSTS
 
 
 def _get_es():
     if not getattr(_get_es, '_es', None):
         from mimas.es.context import init_context
         from mimas.es import ElasticsearchEngine
-        context = init_context('mcluster', options.es_hosts)
+        context = init_context('mcluster', ES_MONITOR_HOSTS)
         es = ElasticsearchEngine.init_by_context(context)
         _get_es._es = es
     return _get_es._es

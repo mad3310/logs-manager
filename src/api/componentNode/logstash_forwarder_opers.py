@@ -10,6 +10,7 @@ from utils import get_file_data, set_file_data
 class LogstashForwarderOpers(AbstractOpers):
 
     def __init__(self):
+        pass
 
     def action(self, cmd):
         ret_val = os.system(cmd)

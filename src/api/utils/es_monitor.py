@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+import datetime
 
 from elasticsearch import TransportError
 from tornado.options import options
@@ -8,8 +9,7 @@ from tornado.options import options
 from utils.mail import MailEgine
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 from common.appconfig import ES_MONTIOR_TRTRY
-from libs.es.store import LOCAL_ES
-
+from libs.es.store import LOCAL_ES, MONITOR_ES
 
 class ESMonitor:
     def __init__(self):
@@ -35,8 +35,6 @@ class ESMonitor:
         body = "%s %s %s" % (self.node_info['cluster.name'], self.node_info['node.name'], message)
         MailEgine.send_exception_email(options.smtp_from_address, options.admins, subject, body)
 
-
-
 es_monitor = ESMonitor()
 
 def main():
@@ -56,7 +54,9 @@ def main():
         if es_monitor.retry == ES_MONTIOR_TRTRY:
             es_monitor.send_mail("are not available")
             break
-
+    timestamp = datetime.datetime.utcnow()
+    index = 'mcl_status_%s_%s' % ("stats", timestamp.strftime('%Y%m%d'))
+    MONITOR_ES.add(index, "stats", stats)
 
 
 

@@ -140,6 +140,10 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
 
 
 class Elasticsearch_Health_Handler(ElasticSearchBaseHandler):
+    """
+    function:get health
+    url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/health"
+    """
 
     def get(self):
         result = LOCAL_ES.get_health()
