@@ -69,7 +69,7 @@ set pidfile /var/run/monit.pid
 set httpd port 30000
 allow 127.0.0.1
 
-check process salt_minion MATCHING 'logstash'
+check process logstash with pidfile /var/run/logstash.pid
     start program = "/etc/init.d/logstash start"
     stop  program = "/etc/init.d/logstash stop"    
 EOF
