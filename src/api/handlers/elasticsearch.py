@@ -1,17 +1,12 @@
-'''
-Created on Mar 8, 2015
-
-@author: root
-'''
-
-import uuid
-
-from tornado.options import options
-
+# -*- coding: utf-8 -*-
 from base import APIHandler
+
 from tornado_letv.tornado_basic_auth import require_basic_auth
 from componentNode.elasticsearch_opers import ElasticsearchOpers
 from utils.exceptions import HTTPAPIError
+from common.appconfig import ES_HEAP_SIZE
+
+from libs.es.store import LOCAL_ES
 
 
 class ElasticSearchBaseHandler(APIHandler):
@@ -21,10 +16,13 @@ class ElasticSearchBaseHandler(APIHandler):
     def check_cluster(self, name):
         zk_op = self.get_zkoper()
         if zk_op.cluster_exists(name) or not name:
-            raise HTTPAPIError(status_code=417, error_detail="server has belong to a cluster,should be not create new cluster!",
+            raise HTTPAPIError(status_code=417, error_detail="server has belong to a cluster,\
+                                    should be not create new cluster!",
                                notification="direct",
-                               log_message="server has belong to a cluster,should be not create new cluster!",
-                               response="the server has belonged to a cluster,should be not create new cluster!")
+                               log_message="server has belong to a cluster,should be not \
+                                    create new cluster!",
+                               response="the server has belonged to a cluster,should be \
+                                    not create new cluster!")
 
 
 @require_basic_auth
@@ -61,9 +59,21 @@ class ElasticsearchNodeSyncHandler(ElasticSearchBaseHandler):
 
 @require_basic_auth
 class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
+    """
+    function: start node
+    url example: curl --user root:root -d "" "http://localhost:9999/elasticsearch/config"
+    """
 
     def post(self):
+        param = self.pretty_param()
+        es_heap_size = int(param.get('es_heap_size', ES_HEAP_SIZE))
+        if es_heap_size < ES_HEAP_SIZE:
+            self.set_status(500)
+            self.finish({"message": "para not valid!"})
+            return
         self.elastic_op.config()
+        self.elastic_op.sys_config(
+            es_heap_size='%dg' % (es_heap_size / ES_HEAP_SIZE))
         self.finish({"message": "config cluster successful!"})
 
 
@@ -71,10 +81,11 @@ class ElasticsearchConfigHandler(ElasticSearchBaseHandler):
 class Elasticsearch_Start_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function: start node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/start"
-        '''
+        """
+        self.elastic_op.pull_config()
         result = self.elastic_op.start()
         self.finish(result)
 
@@ -83,10 +94,10 @@ class Elasticsearch_Start_Handler(ElasticSearchBaseHandler):
 class Elasticsearch_Stop_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function: stop node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/stop"
-        '''
+        """
         result = self.elastic_op.stop()
         self.finish(result)
 
@@ -95,9 +106,45 @@ class Elasticsearch_Stop_Handler(ElasticSearchBaseHandler):
 class Elasticsearch_Restart_Handler(ElasticSearchBaseHandler):
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/elasticsearch/restart"
-        '''
+        """
         result = self.elastic_op.restart()
+        self.finish(result)
+
+
+@require_basic_auth
+class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
+
+    def post(self):
+        """
+        function:add node
+        url example: curl --user root:root -X POST
+                     -d "ips=["10.154.255.248"]" "http://localhost:9999/elasticsearch/nodes"
+        """
+        requestParam = self.get_all_arguments()
+        ips = eval(requestParam.get("ips", []))
+        result = self.elastic_op.add_ip(ips)
+        self.finish(result)
+
+    def delete(self):
+        """
+        function:remove node
+        url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/nodes?ips=['10.154.255.243']"
+        """
+        requestParam = self.get_all_arguments()
+        ips = eval(requestParam.get("ips", []))
+        result = self.elastic_op.remove_ip(ips)
+        self.finish(result)
+
+
+class Elasticsearch_Health_Handler(ElasticSearchBaseHandler):
+    """
+    function:get health
+    url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/health"
+    """
+
+    def get(self):
+        result = LOCAL_ES.get_health()
         self.finish(result)

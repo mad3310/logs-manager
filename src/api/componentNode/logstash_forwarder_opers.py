@@ -1,8 +1,3 @@
-'''
-Created on Mar 13, 2015
-
-@author: root
-'''
 import os
 import logging
 import re
@@ -13,14 +8,9 @@ from utils import get_file_data, set_file_data
 
 
 class LogstashForwarderOpers(AbstractOpers):
-    '''
-    classdocs
-    '''
 
     def __init__(self):
-        '''
-        Constructor
-        '''
+        pass
 
     def action(self, cmd):
         ret_val = os.system(cmd)

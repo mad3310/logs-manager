@@ -7,7 +7,7 @@ from multiprocessing.pool import ThreadPool
 class Cluster(AutoTest):
 
     def __init__(self):
-        '''init data'''
+        """init data"""
         self.container_ips = ["10.154.238.221", "10.154.238.222", "10.154.238.223"]
         #self.zk_ips = ["10.140.62.49", "10.140.62.48", "10.140.62.47"]
         self.zk_ips=["10.154.156.150","10.154.156.151","10.154.156.152"]
@@ -17,51 +17,51 @@ class Cluster(AutoTest):
         self.pwd = 'root'
 
     def test(self):
-        '''before all test processes'''
+        """before all test processes"""
 
     def test_1(self):
-        '''set zookeeper'''
+        """set zookeeper"""
         urls = [(self.container_ips[i], 9999, (), 'POST', '/admin/conf',
                  {"zkAddress": self.zk_ips[i], "zkPort":2181}) for i in range(len(self.container_ips))]
         code, data = multi_request(urls)
         return code != 200
 
     def test_2(self):
-        '''set user'''
+        """set user"""
         urls = [(self.container_ips[i], 9999, (), 'POST', '/admin/user',
                  {"adminUser": self.user, "adminPassword": self.pwd}) for i in range(len(self.container_ips))]
         code, data = multi_request(urls)
         return code != 200
 
     def test_3(self):
-        '''init cluster'''
+        """init cluster"""
         code, data = http_request(self.main_host, 9999, (self.user, self.pwd),
                                   'POST', "/elasticsearch/cluster/init", {"clusterName": self.cluster_name})
         return code != 200
 
     def test_4(self):
-        '''sync data'''
+        """sync data"""
         urls = [(self.container_ips[i], 9999, (self.user, self.pwd), 'POST', '/elasticsearch/cluster/sync',
                  {"clusterName": self.cluster_name}) for i in range(len(self.container_ips))]
         code, data = multi_request(urls)
         return code != 200
 
     def test_5(self):
-        '''init node'''
+        """init node"""
         urls = [(self.container_ips[i], 9999, (self.user, self.pwd), 'POST', '/elasticsearch/node/init', {"dataNodeIp": self.container_ips[
                  i], "dataNodeName":"d-logs-%s-n-%d" % (self.cluster_name, i+1)}) for i in range(len(self.container_ips))]
         code, data = multi_request(urls)
         return code != 200
 
     def test_6(self):
-        '''config es'''
+        """config es"""
         urls = [(self.container_ips[i], 9999, (self.user, self.pwd), 'POST',
                  '/elasticsearch/config', {}) for i in range(len(self.container_ips))]
         code, data = multi_request(urls)
         return code != 200
 
     def test_7(self):
-        '''start es'''
+        """start es"""
         urls = [(self.container_ips[i], 9999, (self.user, self.pwd), 'POST',
                  '/elasticsearch/start', {}) for i in range(len(self.container_ips))]
         code, data = multi_request(urls)

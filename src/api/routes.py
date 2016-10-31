@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-#-*- coding: utf-8 -*-
-
+# -*- coding: utf-8 -*-
 
 from handlers.admin import AdminConf, AdminUser, DownloadFile
 from handlers.logstash import *
@@ -8,7 +6,7 @@ from handlers.logstash_forwarder import *
 from handlers.elasticsearch import *
 from handlers.kibana import *
 from handlers.openssl import *
-
+from handlers.monitor import ElasticSearchClusterMonitorSync
 
 handlers = [
     (r"/admin/conf", AdminConf),
@@ -44,4 +42,9 @@ handlers = [
     (r"/elasticsearch/start", Elasticsearch_Start_Handler),
     (r"/elasticsearch/stop", Elasticsearch_Stop_Handler),
     (r"/elasticsearch/restart", Elasticsearch_Restart_Handler),
+    (r"/elasticsearch/nodes", Elasticsearch_Nodes_Handler),
+    (r"/elasticsearch/health", Elasticsearch_Health_Handler),
+
+    # for monitor
+    (r"/elasticsearch/monitor", ElasticSearchClusterMonitorSync),
 ]

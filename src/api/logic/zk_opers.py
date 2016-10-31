@@ -1,11 +1,7 @@
-__author__ = 'xsank'
-
 from tornado.options import options
 
 from utils.zk_helper import ZkHelper
-from utils import get_zk_address
-from utils import getClusterUUID
-from utils import get_cluster_name
+from utils import get_zk_address, getClusterUUID, get_cluster_name
 from utils.configFileOpers import ConfigFileOpers
 from utils.singleton import singleton
 
@@ -29,6 +25,7 @@ class ZkOpers(object):
         self.monitor_path = ''
         self.status_path = ''
         self.init()
+        self.init_path()
 
     def init(self):
         address, port = get_zk_address()
@@ -55,9 +52,14 @@ class ZkOpers(object):
             if data:
                 self_ip = self.config_op.get_value(
                     options.data_node_property, 'dataNodeIp')
-                #if self_ip in data['discovery.zen.ping.unicast.hosts']:
-                    #data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
+                if self_ip in data['discovery.zen.ping.unicast.hosts']:
+                    data['discovery.zen.ping.unicast.hosts'].remove(self_ip)
                 self.config_op.set_value(options.es_config, data, ':')
+
+    def get_self_ip(self):
+        self_ip = self.config_op.get_value(
+            options.data_node_property, 'dataNodeIp')
+        return self_ip
 
     def cluster_exists(self, name):
         cluster_path = self.root_path + '/' + name
@@ -112,7 +114,8 @@ class ZkOpers(object):
         path = self.datanode_path + ip
         return self.read(path)
 
-    def write_monitor(self, node, data):
+    def write_monitor(self, data):
+        node = self.get_self_ip()
         path = self.monitor_path + node
         self.write(path, data)
 

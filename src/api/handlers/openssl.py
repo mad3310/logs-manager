@@ -10,10 +10,10 @@ class Openssl_Config_Handler(APIHandler):
     openssl_opers = OpensslOpers()
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/openssl/config"
-        '''
+        """
 
         args = self.get_all_arguments()
         self.openssl_opers.new_config(args)
@@ -26,10 +26,10 @@ class Openssl_Copy_Handler(APIHandler):
     openssl_opers = OpensslOpers()
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888//openssl/copy"
-        '''
+        """
         args = self.get_all_arguments()
         self.openssl_opers.copyssl(args)
         self.finish({"message": "copy ok"})
@@ -41,10 +41,10 @@ class Openssl_Info_Handler(APIHandler):
     openssl_opers = OpensslOpers()
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888//openssl/info"
-        '''
+        """
         args = self.get_all_arguments()
         result = self.openssl_opers.get_info(args)
         self.finish({"message": result})

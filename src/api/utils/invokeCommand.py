@@ -8,12 +8,12 @@ class InvokeCommand():
 
     def _runSysCmd(self, cmdStr):
         if cmdStr == "":
-            return ("", 0)
+            return "", 0
         p = subprocess.Popen(cmdStr, shell=True,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         ret_str = p.stdout.read()
         retval = p.wait()
-        return (ret_str.strip(), retval)
+        return ret_str.strip(), retval
 
     def _runSysCmdnoWait(self, cmdStr):
         if cmdStr == "":
