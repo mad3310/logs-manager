@@ -44,24 +44,6 @@ $IP     `hostname`
 EOF
 echo 'set host successfully'
 
-#unzip file to es
-if [ ! -d "/usr/share/elasticsearch/plugins/head" ]; then
-cd /tmp
-/usr/bin/unzip elasticsearch-head-master.zip
-/usr/bin/unzip elasticsearch-kopf-master.zip
-/usr/bin/unzip elasticsearch-sql.zip
-
-mv elasticsearch-head-master /usr/share/elasticsearch/plugins/head
-mv elasticsearch-kopf-master /usr/share/elasticsearch/plugins/kopf
-mv elasticsearch-sql-2.3.2.0 /usr/share/elasticsearch/plugins/sql
-
-chmod 755 /usr/share/elasticsearch/plugins/head
-chmod 755 /usr/share/elasticsearch/plugins/kopf
-chmod 755 /usr/share/elasticsearch/plugins/sql
-
-echo 'unzip file to es'
-fi
-
 #set elasticsearch
 cat > /etc/sysconfig/elasticsearch << EOF
 ES_HOME=/usr/share/elasticsearch
