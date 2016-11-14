@@ -17,11 +17,12 @@ def _get_es():
 
 MONITOR_ES = _get_es()
 
+
 def _get_local_es():
     es_opers = ElasticsearchOpers()
     node_info = es_opers.config_op.getValue(options.data_node_property, ['dataNodeIp', 'dataNodeName'])
     node_ip = node_info.get('dataNodeIp')
-    es_localhost = "{{node_ip}}:{{es_port}}".format(node_ip=node_ip, es_port=ES_PORT)
+    es_localhost = "{node_ip}:{es_port}".format(node_ip=node_ip, es_port=ES_PORT)
     if not getattr(_get_local_es, '_es', None):
         from mimas.es.context import init_context
         from mimas.es import ElasticsearchEngine

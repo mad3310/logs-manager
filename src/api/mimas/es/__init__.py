@@ -7,7 +7,6 @@ SNIFF_TIMEOUT = 20
 
 
 class ElasticsearchEngine(object):
-
     def __init__(self, context):
         self.hosts = context.config.get('ELASTICSEARCH_SERVERS')
         self.engine = None
@@ -30,10 +29,11 @@ class ElasticsearchEngine(object):
         self.engine = engine
         return engine
 
-    def add(self, index, doc_type, body, doc_id=None):
+    def add(self, index, doc_type, body, doc_id=None, ttl=None):
         if not self.engine:
             self.connect()
-        return self.engine.index(index=index, doc_type=doc_type, id=doc_id, body=body)
+        return self.engine.create(index=index, doc_type=doc_type,
+                                  id=doc_id, body=body, ttl=ttl)
 
     def delete(self, index, doc_type, doc_id):
         if not self.engine:
@@ -53,6 +53,3 @@ class ElasticsearchEngine(object):
         if not self.engine:
             self.connect()
         return self.engine.cluster.health()
-
-
-
