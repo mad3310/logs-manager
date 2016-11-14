@@ -39,10 +39,61 @@ $IP     `hostname`
 EOF
 echo 'set host successfully'
 
-#uncompress kibana file
-if [ ! -d "/opt/kibana" ]; then
-cd /tmp
-tar -xvzf kibana-4.0.2-linux-x64.tar.gz
-mv kibana-4.0.2-linux-x64 /opt/kibana
-echo 'uncompress kibana file'
+#set monit
+cat >  /etc/monitrc  << EOF
+set daemon 30
+set logfile /var/log/monit.log
+set pidfile /var/run/monit.pid
+set httpd port 30000
+allow 127.0.0.1
+
+check process kibana with pidfile /var/run/kibana.pid
+    start program = "/etc/init.d/kibana start"
+    stop  program = "/etc/init.d/kibana stop"    
+EOF
+/etc/init.d/monit start
+echo 'set monit successfully'
+
+#set logrotate
+cat > /etc/logrotate.d/kibana << EOF
+/var/log/kibana/kibana.log
+{
+daily
+dateext
+dateformat -%Y%m%d-%s
+nocompress
+size 10M
+missingok
+notifempty
+copytruncate
+rotate 3
+postrotate
+endscript
+}
+EOF
+
+cat > /etc/logrotate.d/monit << EOF
+/var/log/monit.log
+{
+daily
+dateext
+dateformat -%Y%m%d-%s
+nocompress
+size 10M
+missingok
+notifempty
+copytruncate
+rotate 3
+postrotate
+endscript
+}
+EOF
+
+is_logrotate=`grep -c "logrotate" /etc/crontab`
+if [ ${is_logrotate} -eq 0 ]
+then
+echo '0 * * * * root /usr/sbin/logrotate /etc/logrotate.conf >/dev/null 2>&1' >> /etc/crontab
 fi
+
+service crond restart
+echo 'set logrotate successfully'

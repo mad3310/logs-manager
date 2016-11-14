@@ -50,15 +50,23 @@ daily
 dateext
 dateformat -%Y%m%d-%s
 nocompress
-size 1M
+size 10M
 missingok
 notifempty
 copytruncate
-rotate 5
+rotate 3
 postrotate
 endscript
 }
 EOF
+
+is_logrotate=`grep -c "logrotate" /etc/crontab`
+if [ ${is_logrotate} -eq 0 ]
+then
+echo '0 * * * * root /usr/sbin/logrotate /etc/logrotate.conf >/dev/null 2>&1' >> /etc/crontab
+fi
+
+service crond restart
 echo 'set logrotate successfully'
 
 # set monit
