@@ -1,21 +1,20 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
 
 import os.path
-import routes
-
 import logging.config
-
 import tornado.ioloop
 import tornado.options
 import tornado.web
 
 from tornado.options import options
 from tornado.httpserver import HTTPServer
-
 from appdefine import appDefine
-from utils.es_monitor import main as es_monitor_mian
+from utils.es_monitor import ESMonitor
 from utils.mail import MailEgine
+from utils.es_monitor import main as es_monitor_mian
 
+import routes
 
 class Application(tornado.web.Application):
 
@@ -38,4 +37,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
