@@ -139,10 +139,11 @@ class Elasticsearch_Nodes_Handler(ElasticSearchBaseHandler):
         self.finish(result)
 
 
+@require_basic_auth
 class Elasticsearch_Health_Handler(ElasticSearchBaseHandler):
     """
     function:get health
-    url example: curl -g --user root:root -X DELETE "http://localhost:9999/elasticsearch/health"
+    url example: curl --user root:root  "http://localhost:9999/elasticsearch/health"
     """
 
     def get(self):
