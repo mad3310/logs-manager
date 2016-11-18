@@ -1,8 +1,3 @@
-'''
-Created on Mar 13, 2015
-
-@author: root
-'''
 import os
 import re
 import logging
@@ -13,14 +8,8 @@ from utils.configFileOpers import ConfigFileOpers
 
 
 class KibanaOpers(AbstractOpers):
-    '''
-    classdocs
-    '''
 
     def __init__(self):
-        '''
-        Constructor
-        '''
         self.config_op = ConfigFileOpers()
 
     def action(self, cmd):
