@@ -42,6 +42,50 @@ $IP     `hostname`
 EOF
 echo 'set host successfully'
 
+#set logrotate
+cat > /etc/logrotate.d/monit << EOF
+/var/log/monit.log
+{
+daily
+dateext
+dateformat -%Y%m%d-%s
+nocompress
+size 10M
+missingok
+notifempty
+copytruncate
+rotate 3
+postrotate
+endscript
+}
+EOF
+
+is_logrotate=`grep -c "logrotate" /etc/crontab`
+if [ ${is_logrotate} -eq 0 ]
+then
+echo '0 * * * * root /usr/sbin/logrotate /etc/logrotate.conf >/dev/null 2>&1' >> /etc/crontab
+fi
+
+service crond restart
+echo 'set logrotate successfully'
+
+# set monit
+cat >  /etc/monitrc  << EOF
+set daemon 30
+set logfile /var/log/monit.log
+set pidfile /var/run/monit.pid
+set httpd port 30000
+allow 127.0.0.1
+
+check process logstash with pidfile /var/run/logstash.pid
+    start program = "/etc/init.d/logstash start"
+    stop  program = "/etc/init.d/logstash stop"    
+EOF
+
+/etc/init.d/monit start
+
+echo 'set monit successfully'
+
 #set logstash
 cat > /etc/sysconfig/logstash << EOF
 LS_HEAP_SIZE="1500m"

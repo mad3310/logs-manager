@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
 import os
@@ -53,7 +52,7 @@ class ConfigFileOpers(object):
             for line in readlines:
                 if line.find(separator):
                     pair = line.split(separator)
-                    key = pair[0].strip('#')
+                    key = pair[0].strip('#').strip()
                     if key in dic:
                         if separator != ':':
                             line = key + separator + str(dic[key]) + '\n'

@@ -1,6 +1,3 @@
-__author__ = 'xsank'
-
-
 def singleton(cls):
     instances = {}
 

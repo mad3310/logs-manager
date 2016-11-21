@@ -1,4 +1,5 @@
-#-*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+
 import base64
 import logging
 
@@ -14,10 +15,10 @@ class AdminConf(APIHandler):
     confOpers = ConfigFileOpers()
 
     def post(self):
-        '''
+        """
         function: admin conf
         url example: curl -d "zkAddress=10.204.8.211&zkPort=2181" "http://localhost:8888/admin/conf"
-        '''
+        """
         requestParam = self.get_all_arguments()
         if requestParam != {}:
             self.confOpers.set_value(options.zk_property, requestParam, '=')
@@ -32,10 +33,10 @@ class AdminUser(APIHandler):
     confOpers = ConfigFileOpers()
 
     def post(self):
-        '''
+        """
         function: create admin user
         url example: curl -d "adminUser=root&adminPassword=root" "http://localhost:8888/admin/user"
-        '''
+        """
         requestParam = self.get_all_arguments()
         if 'adminPassword' in requestParam:
             new_value = base64.encodestring(
@@ -55,10 +56,10 @@ class AdminUser(APIHandler):
 class DownloadFile(RequestHandler):
 
     def get(self, filename):
-        '''
+        """
         function: create admin user
         url example: curl -d "adminUser=root&adminPassword=root" "http://localhost:8888/admin/user"
-        '''
+        """
 
         ifile = open(filename, "r")
         self.set_header('Content-Type', 'text/cnf')

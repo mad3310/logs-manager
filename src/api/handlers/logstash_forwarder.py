@@ -16,10 +16,10 @@ class Logstash_forwarder_Start_Handler(APIHandler):
 
     @asynchronous
     def post(self):
-        '''
+        """
         function: start node
         url example: curl --user root:root -d "" "http://localhost:8888/logstash_forwarder/start"
-        '''
+        """
         result = self.logstash_forwarder_opers.start()
         self.finish(result)
 
@@ -31,10 +31,10 @@ class Elasticsearch_Start_Handler(APIHandler):
 
     @asynchronous
     def post(self):
-        '''
+        """
         function: start node
         url example: curl --user root:root -d "" "http://localhost:8888/logstash_forwarder/start"
-        '''
+        """
         result = self.logstash_forwarder_opers.start()
         self.finish(result)
 
@@ -45,10 +45,10 @@ class Logstash_forwarder_Stop_Handler(APIHandler):
     logstash_forwarder_opers = LogstashForwarderOpers()
 
     def post(self):
-        '''
+        """
         function: stop node
         url example: curl --user root:root -d "" "http://localhost:8888/node/stop"
-        '''
+        """
         result = self.logstash_forwarder_opers.stop()
         self.finish(result)
 
@@ -59,10 +59,10 @@ class Logstash_forwarder_Restart_Handler(APIHandler):
     logstash_forwarder_opers = LogstashForwarderOpers()
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/node/reload"
-        '''
+        """
         result = self.logstash_forwarder_opers.restart()
         self.finish(result)
 
@@ -73,10 +73,10 @@ class Logstash_forwarder_Config_Handler(APIHandler):
     logstash_forwarder_opers = LogstashForwarderOpers()
 
     def post(self):
-        '''
+        """
         function: reload node
         url example: curl --user root:root -d "" "http://localhost:8888/node/reload"
-        '''
+        """
         args = self.get_all_arguments()
         result = self.logstash_forwarder_opers.config(args)
         self.finish(result)

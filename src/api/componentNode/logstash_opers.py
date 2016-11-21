@@ -1,8 +1,3 @@
-'''
-Created on Mar 13, 2015
-
-@author: root
-'''
 import os
 import logging
 
@@ -11,14 +6,6 @@ from common.abstractOpers import AbstractOpers
 
 
 class LogstashOpers(AbstractOpers):
-    '''
-    classdocs
-    '''
-
-    def __init__(self, ):
-        '''
-        Constructor
-        '''
 
     def action(self, cmd):
         ret_val = os.system(cmd)

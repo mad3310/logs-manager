@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 
-'''
-Created on 2013-7-21
-
-@author: asus
-'''
-
 import urllib2
 import json
 

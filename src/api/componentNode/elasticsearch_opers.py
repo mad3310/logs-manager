@@ -1,8 +1,3 @@
-'''
-Created on Mar 13, 2015
-
-@author: root
-'''
 import os
 import uuid
 import logging
@@ -14,9 +9,6 @@ from logic.zk_opers import ToolZkOpers
 
 
 class ElasticsearchOpers(AbstractOpers):
-    '''
-    classdocs
-    '''
 
     def __init__(self):
         self.config_op = ConfigFileOpers()
