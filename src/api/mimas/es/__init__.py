@@ -29,11 +29,11 @@ class ElasticsearchEngine(object):
         self.engine = engine
         return engine
 
-    def add(self, index, doc_type, body, doc_id=None, ttl=None):
+    def add(self, index, doc_type, body, doc_id=None):
         if not self.engine:
             self.connect()
-        return self.engine.create(index=index, doc_type=doc_type,
-                                  id=doc_id, body=body, ttl=ttl)
+        return self.engine.index(index=index, doc_type=doc_type,
+                                 id=doc_id, body=body)
 
     def delete(self, index, doc_type, doc_id):
         if not self.engine:
