@@ -18,7 +18,7 @@ define('send_email_switch', default=True, type=bool,
 define('admins', default=("zhoubingzheng <zhoubingzheng@letv.com>",
                           "wangyiyang <wangyiyang@le.com>",
                           "liujinliu <liujinliu@le.com>"), help='admin email address')
-define('smtp_host', default="mail.letv.com", help='smtp host')
+define('smtp_host', default="10.205.91.22", help='smtp host')
 define('smtp_port', default=587, help='smtp port')
 define('smtp_user', default="mcluster", help='smtp user')
 define('smtp_password', default="Mcl_20140903!", help='smtp password')
