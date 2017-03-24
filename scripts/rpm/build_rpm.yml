@@ -16,6 +16,8 @@ name: logs-manager
 # 软件包版本号
 version: 0.0.4
 
+release: 1
+
 # 软件包安装及运行时依赖
 dependencies:
     - kazoo

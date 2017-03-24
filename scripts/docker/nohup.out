@@ -1,0 +1,10 @@
+Sending build context to Docker daemon  7.68 kB
+Sending build context to Docker daemon 
+Sending build context to Docker daemon 9.728 kB
+Sending build context to Docker daemon 
+Sending build context to Docker daemon  12.8 kB
+Sending build context to Docker daemon 
+2017/03/24 17:24:49 The command [/bin/sh -c yum install -y vim] returned a non-zero code: 1
+2017/03/24 17:25:00 Error: Invalid Registry endpoint: Get http://dockerapp.et.letv.com/v1/_ping: dial tcp 10.150.120.146:80: i/o timeout
+2017/03/24 17:25:10 Error: Invalid Registry endpoint: Get http://dockerapp.et.letv.com/v1/_ping: dial tcp 10.150.120.146:80: i/o timeout
+2017/03/24 17:25:20 Error: Invalid Registry endpoint: Get http://dockerapp.et.letv.com/v1/_ping: dial tcp 10.150.120.146:80: i/o timeout
